@@ -2393,13 +2393,35 @@ window.addEventListener('hashchange',()=>{ const h=(location.hash||'').replace('
   authModalBg.addEventListener('click', closeAuth);
   signInBtn.addEventListener('click', openAuth);
 
+  // ---------- compute a safe OAuth redirect URL ----------
+  // Returns a clean http(s) URL that Google can redirect back to.
+  // If the page is opened from the local filesystem (file://) OAuth cannot
+  // work at all, because Google/Supabase cannot redirect back to a file path
+  // (this is the classic "localhost refused to connect" / blank-page failure).
+  function computeRedirectTo(){
+    const loc = window.location;
+    // OAuth only works over http/https. file:// will always fail.
+    if(loc.protocol !== 'http:' && loc.protocol !== 'https:'){
+      return null;
+    }
+    // Strip any existing hash / query (e.g. leftover ?code=... &error=...)
+    // so we hand Google a clean base URL to return to.
+    return loc.origin + loc.pathname;
+  }
+
   // ---------- Google sign-in ----------
   googleBtn.addEventListener('click', async ()=>{
     if(!sb){ showAppToast('Auth not available (Supabase not connected).'); return; }
+
+    const redirectTo = computeRedirectTo();
+    if(!redirectTo){
+      showAppToast('Login needs the page served over http(s). Open it via a web server or your live site — not by double-clicking the file.');
+      return;
+    }
+
     googleBtn.disabled = true;
     googleBtn.innerHTML = '<i class="fas fa-spinner spin"></i> Redirecting to Google…';
     try{
-      const redirectTo = window.location.origin + window.location.pathname;
       const { error } = await sb.auth.signInWithOAuth({
         provider:'google',
         options:{ redirectTo, queryParams:{ access_type:'offline', prompt:'select_account' } }
@@ -2408,7 +2430,10 @@ window.addEventListener('hashchange',()=>{ const h=(location.hash||'').replace('
       // browser will redirect away
     }catch(err){
       console.error(err);
-      showAppToast('Google sign-in failed: '+(err.message||'try again'));
+      // Surface a clearer hint for the most common cause: the current URL
+      // is not in Supabase's Redirect URL allow-list.
+      const msg = (err && err.message) ? err.message : 'try again';
+      showAppToast('Google sign-in failed: '+msg+'. If this keeps happening, add '+redirectTo+' to your Supabase → Authentication → URL Configuration → Redirect URLs.');
       googleBtn.disabled=false;
       googleBtn.innerHTML = googleBtnLabel();
     }
@@ -2635,13 +2660,41 @@ window.addEventListener('hashchange',()=>{ const h=(location.hash||'').replace('
     }
   }
 
+  // ---------- clean OAuth params out of the URL after a redirect ----------
+  // After Google redirects back, the URL can contain ?code=... or
+  // #access_token=... / ?error=.... Once Supabase has consumed them we strip
+  // them so a page refresh doesn't re-trigger a failing callback.
+  function cleanAuthParamsFromUrl(){
+    try{
+      const url = new URL(window.location.href);
+      const hadHashToken = /access_token|error|provider_token|refresh_token/.test(url.hash);
+      const hadQueryCode = url.searchParams.has('code') || url.searchParams.has('error') || url.searchParams.has('error_description');
+      if(hadHashToken || hadQueryCode){
+        ['code','error','error_description','state','provider'].forEach(k=>url.searchParams.delete(k));
+        url.hash = '';
+        window.history.replaceState({}, document.title, url.pathname + url.search);
+      }
+    }catch(e){ /* no-op */ }
+  }
+
+  // ---------- surface OAuth errors that come back in the URL ----------
+  function reportUrlAuthError(){
+    try{
+      const q = new URLSearchParams(window.location.search);
+      const h = new URLSearchParams((window.location.hash||'').replace(/^#/,''));
+      const err = q.get('error_description') || q.get('error') || h.get('error_description') || h.get('error');
+      if(err){ showAppToast('Sign-in error: '+decodeURIComponent(err.replace(/\+/g,' '))); }
+    }catch(e){ /* no-op */ }
+  }
+
   if(sb){
+    reportUrlAuthError();
     // pick up redirect result / existing session
     sb.auth.getSession().then(({ data })=>{ handleSession(data.session); });
     sb.auth.onAuthStateChange((event, session)=>{
       if(event==='SIGNED_IN' || event==='INITIAL_SESSION' || event==='TOKEN_REFRESHED' || event==='USER_UPDATED'){
         handleSession(session);
-        if(event==='SIGNED_IN'){ closeAuth(); }
+        if(event==='SIGNED_IN'){ closeAuth(); cleanAuthParamsFromUrl(); }
       }
       if(event==='SIGNED_OUT'){ currentUser=null; currentProfile=null; reflectAuthState(); }
     });
@@ -2662,6 +2715,7 @@ document.querySelectorAll('button').forEach(b=>{
 });
 </script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v833ccba57c9e4d2798f2e76cebdd09a11778172276447" integrity="sha512-57MDmcccJXYtNnH+ZiBwzC4jb2rvgVCEokYN+L/nLlmO8rfYT/gIpW2A569iJ/3b+0UEasghjuZH/ma3wIs/EQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
