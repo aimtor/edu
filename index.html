@@ -100,17 +100,26 @@ tailwind.config = {
     background:linear-gradient(115deg,rgba(255,255,255,.22) 0%,rgba(255,255,255,0) 42%);
     pointer-events:none}
   .book-cover{box-shadow:inset -6px 0 12px -6px rgba(0,0,0,.28)}
-  /* ===== Notes "tumble" masonry layout ===== */
-  .notes-tumble{column-count:1;column-gap:1.25rem}
-  @media (min-width:640px){.notes-tumble{column-count:2}}
-  @media (min-width:1024px){.notes-tumble{column-count:3}}
-  @media (min-width:1280px){.notes-tumble{column-count:4}}
-  .notes-tumble > *{break-inside:avoid;-webkit-column-break-inside:avoid;page-break-inside:avoid;margin-bottom:1.25rem;display:inline-block;width:100%}
-  .note-card{transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s}
-  .note-card:hover{transform:translateY(-6px) rotate(-.6deg)}
-  .note-card:nth-child(3n){transform:rotate(.5deg)}
-  .note-card:nth-child(4n){transform:rotate(-.5deg)}
-  .note-card:nth-child(3n):hover,.note-card:nth-child(4n):hover{transform:translateY(-6px) rotate(0deg)}
+  /* ===== Notes: STRAIGHT, aligned, colourful grid (no more bent/tumble cards) ===== */
+  .notes-tumble{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(min(100%,240px),1fr));
+    gap:1.25rem;
+    align-items:stretch;
+  }
+  @media (max-width:520px){
+    .notes-tumble{grid-template-columns:repeat(2,minmax(0,1fr));gap:.85rem}
+  }
+  .notes-tumble > *{width:100%;height:100%}
+  /* cards are perfectly upright — only a gentle lift on hover, never rotated */
+  .note-card{
+    transition:transform .3s cubic-bezier(.16,1,.3,1),box-shadow .3s;
+    transform:rotate(0deg);
+    height:100%;
+    display:flex;flex-direction:column;
+  }
+  .note-card:hover{transform:translateY(-6px) rotate(0deg)}
+  .note-card > div:last-child{display:flex;flex-direction:column;flex:1}
   .line-clamp-2{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
   .line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
   .card-hover{transition:all .35s cubic-bezier(.4,0,.2,1)}
@@ -263,9 +272,322 @@ tailwind.config = {
   .onb-radio:hover{border-color:#ff97b3}
   .onb-radio.selected{background:linear-gradient(135deg,#fb3d72,#ff7a2f);color:#fff;border-color:transparent;box-shadow:0 8px 20px -8px rgba(251,61,114,.5)}
   .dark .onb-radio{background:rgba(30,41,59,.6);color:#cbd5e1;border-color:#334155}
+
+  /* ============================================================
+     UNIVERSAL RESPONSIVE DESIGN SYSTEM
+     Charming, consistent layout across phone → tablet → desktop → 4K.
+     No layout destruction: content stays aligned, straight & readable.
+  ============================================================ */
+
+  /* Fluid, comfortable typography that scales with the viewport */
+  :root{
+    --page-x: clamp(1rem, 4vw, 2rem);
+    --radius-lg: 1.25rem;
+  }
+  h1{font-size:clamp(1.9rem, 1.2rem + 3.2vw, 3.75rem); line-height:1.08}
+  h2{font-size:clamp(1.5rem, 1.1rem + 1.8vw, 2.5rem); line-height:1.15}
+  h3{font-size:clamp(1.1rem, 1rem + .6vw, 1.5rem)}
+  p{text-wrap:pretty}
+
+  /* Cap the ultra-wide desktop canvas so content never stretches too thin */
+  @media (min-width:1536px){
+    .max-w-7xl{max-width:88rem}
+  }
+
+  /* Smooth, GPU-friendly hover lift for every card on desktop */
+  @media (hover:hover) and (pointer:fine){
+    .card-hover, .note-card{will-change:transform}
+  }
+  /* On touch devices, disable heavy hover transforms so scrolling feels native */
+  @media (hover:none){
+    .card-hover:hover{transform:none}
+    .note-card:hover{transform:none}
+  }
+
+  /* Images & media never overflow their container on any device */
+  img,svg,video,canvas{max-width:100%;height:auto}
+
+  /* ===== Small phones (≤400px): keep everything tidy & tappable ===== */
+  @media (max-width:400px){
+    .grid.grid-cols-3{gap:.6rem}
+    #navMenu .nav-item a span{font-size:8px}
+  }
+
+  /* ===== Tablet refinement (641px–1023px): balanced 2-up feel ===== */
+  @media (min-width:641px) and (max-width:1023px){
+    .card-hover:hover{transform:translateY(-6px)}
+  }
+
+  /* ===== Desktop polish: crisper shadows & richer hover glow ===== */
+  @media (min-width:1024px){
+    .card-hover{transition:transform .35s cubic-bezier(.16,1,.3,1),box-shadow .35s}
+    .card-hover:hover{transform:translateY(-10px)}
+  }
+
+  /* Consistent, colourful focus ring for keyboard & accessibility */
+  a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{
+    outline:3px solid rgba(109,87,245,.5);outline-offset:2px;border-radius:.55rem;
+  }
+
+  /* Respect users who prefer reduced motion */
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
+  }
+
+  /* Prevent long words/URLs from breaking the layout on mobile */
+  h1,h2,h3,h4,p,a,span,li{overflow-wrap:break-word}
+
+  /* ===== Exam Power Board — MODERN "aurora glass" theme ===== */
+  .ep-door{
+    background:
+      radial-gradient(130% 120% at 8% -10%, rgba(139,92,246,.55), transparent 45%),
+      radial-gradient(120% 120% at 100% 0%, rgba(16,183,166,.45), transparent 45%),
+      radial-gradient(120% 130% at 50% 120%, rgba(251,113,133,.40), transparent 50%),
+      linear-gradient(155deg,#6d57f5 0%,#7c3aed 45%,#4f46e5 100%);
+    border:1px solid rgba(255,255,255,.35);
+    box-shadow:0 30px 70px -20px rgba(76,29,149,.55), inset 0 1px 0 rgba(255,255,255,.35);
+    position:relative;
+  }
+  .ep-door::before{
+    content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+    background:
+      radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,.7), transparent),
+      radial-gradient(2px 2px at 70% 60%, rgba(255,255,255,.5), transparent),
+      radial-gradient(1.5px 1.5px at 85% 25%, rgba(255,255,255,.6), transparent),
+      radial-gradient(1.5px 1.5px at 35% 80%, rgba(255,255,255,.5), transparent);
+    opacity:.6;
+  }
+  .dark .ep-door{
+    background:
+      radial-gradient(130% 120% at 8% -10%, rgba(139,92,246,.40), transparent 45%),
+      radial-gradient(120% 120% at 100% 0%, rgba(16,183,166,.32), transparent 45%),
+      radial-gradient(120% 130% at 50% 120%, rgba(251,113,133,.28), transparent 50%),
+      linear-gradient(155deg,#1e1b4b 0%,#0f172a 55%,#020617 100%);
+    border-color:rgba(148,163,255,.25);
+    box-shadow:0 30px 70px -20px rgba(0,0,0,.7), inset 0 1px 0 rgba(255,255,255,.08);
+  }
+  .ep-hand{font-family:'Plus Jakarta Sans','Sora',sans-serif;letter-spacing:.1px;font-feature-settings:"ss01","cv01","cv11"}
+  #epBoardExam,#examPower h1,#examPower h2,#examPower h3,#examPower h4{font-family:'Sora','Plus Jakarta Sans',sans-serif;letter-spacing:-.01em}
+  .ep-panel{
+    background:rgba(255,255,255,.14);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.28);
+    border-radius:20px;padding:18px;
+    box-shadow:0 8px 28px -12px rgba(30,10,80,.35), inset 0 1px 0 rgba(255,255,255,.25);
+    transition:transform .25s ease, box-shadow .25s ease;
+  }
+  .ep-panel:hover{transform:translateY(-3px);box-shadow:0 16px 40px -14px rgba(30,10,80,.45)}
+  .dark .ep-panel{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.10)}
+  .ep-title{font-family:'Sora','Plus Jakarta Sans',sans-serif;font-size:1.05rem;font-weight:800;
+    color:#fff;margin-bottom:12px;display:flex;align-items:center;letter-spacing:.2px}
+  .dark .ep-title{color:#f1f5f9}
+  .ep-tbox{background:rgba(255,255,255,.18);color:#fff;border-radius:14px;padding:8px 10px;min-width:56px;
+    text-align:center;line-height:1.1;border:1px solid rgba(255,255,255,.30);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);box-shadow:inset 0 1px 0 rgba(255,255,255,.3)}
+  .dark .ep-tbox{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.14)}
+  .ep-tbox span{display:block;font-size:1.5rem;font-weight:800;font-family:'Sora',sans-serif}
+  .ep-tbox small{font-size:.55rem;text-transform:uppercase;letter-spacing:1.5px;opacity:.85}
+  .ep-table th{font-family:'Sora',sans-serif;font-size:.78rem;font-weight:700;text-align:left;text-transform:uppercase;
+    letter-spacing:.5px;padding:10px 10px;border-bottom:2px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);background:rgba(255,255,255,.08)}
+  .dark .ep-table th{color:rgba(241,245,249,.8);border-color:rgba(255,255,255,.14);background:rgba(255,255,255,.04)}
+  .ep-table td{padding:10px 10px;border-bottom:1px solid rgba(255,255,255,.14);color:#fff;vertical-align:middle}
+  .dark .ep-table td{color:#e2e8f0;border-color:rgba(255,255,255,.08)}
+  .ep-table tr{transition:background .2s}
+  .ep-table tbody tr:hover{background:rgba(255,255,255,.06)}
+  .ep-table input[type=text]{width:100%;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:5px 8px;
+    font-family:'Plus Jakarta Sans',sans-serif;font-size:.85rem;color:#fff;outline:none;transition:.2s}
+  .ep-table input[type=text]:focus{border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.18)}
+  .ep-table input[type=text]:disabled{opacity:.4;background:transparent;border-color:transparent}
+  .ep-table input[type=text]::placeholder{color:rgba(255,255,255,.5)}
+  .ep-check{width:28px;height:28px;border-radius:9px;border:2px solid rgba(255,255,255,.55);
+    display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:.2s;color:transparent}
+  .ep-check:hover{border-color:#fff;transform:scale(1.08)}
+  .ep-check.on{background:linear-gradient(135deg,#34d399,#10b7a6);border-color:transparent;color:#fff;box-shadow:0 4px 12px -2px rgba(16,183,166,.6)}
+  .ep-cal-cell{position:relative;aspect-ratio:1;border-radius:9px;display:flex;align-items:center;justify-content:center;
+    background:rgba(255,255,255,.10);color:#fff;font-weight:600;transition:.2s}
+  .dark .ep-cal-cell{background:rgba(255,255,255,.06);color:#e2e8f0}
+  .ep-perf-cell{border-radius:14px;padding:10px 4px;text-align:center;color:#fff;font-weight:800;
+    font-family:'Sora',sans-serif;line-height:1.1;box-shadow:0 6px 18px -8px rgba(0,0,0,.4)}
+  .ep-perf-cell small{display:block;font-size:.6rem;font-weight:600;opacity:.9;text-transform:uppercase;letter-spacing:.5px}
+
+  /* ===== Routine circular countdown timer (gol gori) — ENHANCED ===== */
+  .ep-ring-wrap{position:relative;width:64px;height:64px;flex-shrink:0;
+    filter:drop-shadow(0 4px 8px rgba(11,30,59,.18));transition:transform .25s ease}
+  .ep-ring-wrap:hover{transform:scale(1.08)}
+  .ep-ring{transform:rotate(-90deg);width:64px;height:64px}
+  .ep-ring-track{fill:none;stroke:rgba(11,30,59,.12);stroke-width:6}
+  .ep-ring-prog{fill:none;stroke:url(#epRingGrad);stroke-width:6;stroke-linecap:round;
+    transition:stroke-dashoffset 1s linear, stroke .4s}
+  .ep-ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    font-family:'Sora',sans-serif;line-height:1;pointer-events:none}
+  .ep-ring-time{font-size:.82rem;font-weight:900;color:#0b1e3b;letter-spacing:-.2px}
+  .ep-ring-unit{font-size:.46rem;font-weight:700;margin-top:2px;opacity:.75;text-transform:uppercase;letter-spacing:.6px;color:#8a6d10}
+  /* running (plenty of time) → cool teal/green glow */
+  .ep-ring-wrap .ep-ring-prog{stroke:url(#epRingGrad)}
+  /* < 5 min left → amber warning + pulsing wrap */
+  .ep-ring-wrap.soon{animation:epRingPulse 1.4s ease-in-out infinite}
+  .ep-ring-wrap.soon .ep-ring-prog{stroke:#f59e0b !important}
+  .ep-ring-wrap.soon .ep-ring-time{color:#b45309}
+  /* time over → red ring + blinking */
+  .ep-ring-wrap.over .ep-ring-prog{stroke:#fb7185 !important}
+  .ep-ring-wrap.over .ep-ring-time{color:#e11d48;animation:epBlink 1s ease-in-out infinite}
+  .ep-over-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;
+    font-family:'Sora',sans-serif;font-size:.66rem;font-weight:800;text-transform:uppercase;letter-spacing:.6px;
+    background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff;box-shadow:0 6px 16px -4px rgba(225,29,72,.55);
+    animation:epPulse 1.6s ease-in-out infinite}
+  @keyframes epPulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.85;transform:scale(1.05)}}
+  @keyframes epBlink{0%,100%{opacity:1}50%{opacity:.35}}
+  @keyframes epRingPulse{0%,100%{filter:drop-shadow(0 4px 8px rgba(245,158,11,.35))}50%{filter:drop-shadow(0 4px 14px rgba(245,158,11,.7))}}
+
+  /* =====================================================================
+     ===== STRICT EXAM-BOARD THEME (formal / serious examination look) ===
+     ===================================================================== */
+  :root{
+    --exb-navy:#0b1e3b;      /* deep official navy */
+    --exb-navy2:#10294f;
+    --exb-ink:#0a1729;
+    --exb-gold:#c9a227;      /* official gold seal */
+    --exb-gold2:#e6c14b;
+    --exb-crimson:#8b1e2d;   /* examination red */
+    --exb-paper:#f7f3e8;     /* aged paper */
+    --exb-line:rgba(201,162,39,.35);
+  }
+  /* The board container — a formal examination notice board (WHITE background) */
+  .ep-door.exam-board{
+    background:
+      repeating-linear-gradient(0deg, rgba(11,30,59,.015) 0 2px, transparent 2px 4px),
+      radial-gradient(120% 120% at 100% 0%, rgba(201,162,39,.12), transparent 55%),
+      #ffffff;
+    border:2px solid var(--exb-gold);
+    box-shadow:0 30px 70px -24px rgba(11,30,59,.25), inset 0 0 0 4px rgba(201,162,39,.10), inset 0 1px 0 rgba(255,255,255,.8);
+    border-radius:1.25rem;
+    color:#0b1e3b;
+  }
+  .ep-door.exam-board::before{opacity:.12}
+  /* keep white background even in dark mode as requested */
+  .dark .ep-door.exam-board{
+    background:
+      repeating-linear-gradient(0deg, rgba(11,30,59,.02) 0 2px, transparent 2px 4px),
+      radial-gradient(120% 120% at 100% 0%, rgba(201,162,39,.14), transparent 55%),
+      #ffffff;
+    border-color:var(--exb-gold);
+    color:#0b1e3b;
+  }
+  /* Official gold corner seal on the board */
+  .exam-board-seal{
+    position:absolute;top:14px;right:16px;width:60px;height:60px;border-radius:50%;
+    border:2px dashed rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:1.35rem;background:rgba(255,255,255,.14);
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    box-shadow:inset 0 0 12px rgba(255,255,255,.25);z-index:5;
+  }
+  @media (max-width:640px){ .exam-board-seal{width:46px;height:46px;font-size:1rem;top:10px;right:10px} }
+  /* Panels look like framed official notices (on white board) */
+  .exam-board .ep-panel{
+    background:#fbf9f2;
+    border:1px solid rgba(201,162,39,.45);
+    border-radius:12px;
+    box-shadow:0 10px 24px -16px rgba(11,30,59,.35), inset 0 1px 0 rgba(255,255,255,.9);
+    color:#1e293b;
+  }
+  .exam-board .ep-panel:hover{transform:translateY(-2px)}
+  .exam-board .ep-title{color:#8a6d10;text-transform:uppercase;letter-spacing:1px;font-size:.95rem}
+  /* headings & body text inside the white board default to dark ink */
+  .exam-board h1,.exam-board h2,.exam-board h3,.exam-board h4,.exam-board h5,
+  .exam-board p,.exam-board span,.exam-board li,.exam-board label,.exam-board td{color:#1e293b}
+  .exam-board [class*="text-white"]{color:#1e293b !important}
+  .exam-board .ep-tbox{background:linear-gradient(160deg,#fffdf5,#f7f0dc);border:1.5px solid rgba(201,162,39,.5);color:#0b1e3b;box-shadow:0 4px 10px -6px rgba(201,162,39,.5)}
+  .exam-board .ep-tbox span{color:#0b1e3b}
+  .exam-board .ep-tbox small{color:#8a6d10}
+  .exam-board .ep-tbox input,.exam-board .ep-tbox select{color:#1e293b}
+  .exam-board .ep-table td{color:#1e293b}
+  .exam-board .ep-table input[type=text]{color:#1e293b}
+  .exam-board .ep-table input[type=text]::placeholder{color:rgba(30,41,59,.5)}
+  .exam-board .ep-table th{color:#8a6d10;background:rgba(201,162,39,.12);border-bottom:2px solid var(--exb-gold)}
+  .exam-board .ep-table tr{border-bottom:1px solid rgba(201,162,39,.18)}
+  .exam-board .ep-check{border-color:rgba(11,30,59,.4)}
+  .exam-board .ep-check:hover{border-color:#0b1e3b}
+  .exam-board .ep-check.on{background:linear-gradient(135deg,var(--exb-gold),var(--exb-gold2));box-shadow:0 4px 12px -2px rgba(201,162,39,.6);color:#0b1e3b}
+  .exam-board .ep-cal-cell{background:rgba(11,30,59,.06);color:#1e293b}
+  .exam-board-headline{background:linear-gradient(120deg,#ffd97a 0%,#ff97b3 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:'Sora',sans-serif;letter-spacing:.5px}
+
+  /* Strict banner for the My Power hero */
+  .exam-strict-hero{
+    background:
+      radial-gradient(130% 120% at 8% -10%, rgba(139,92,246,.55), transparent 45%),
+      radial-gradient(120% 120% at 100% 0%, rgba(16,183,166,.40), transparent 45%),
+      radial-gradient(120% 130% at 50% 120%, rgba(251,113,133,.38), transparent 50%),
+      linear-gradient(155deg,#6d57f5 0%,#7c3aed 45%,#4f46e5 100%)!important;
+    border-bottom:3px solid rgba(255,255,255,.25);
+  }
+  .dark .exam-strict-hero{
+    background:
+      radial-gradient(130% 120% at 8% -10%, rgba(139,92,246,.40), transparent 45%),
+      radial-gradient(120% 120% at 100% 0%, rgba(16,183,166,.30), transparent 45%),
+      radial-gradient(120% 130% at 50% 120%, rgba(251,113,133,.26), transparent 50%),
+      linear-gradient(155deg,#1e1b4b 0%,#0f172a 55%,#020617 100%)!important;
+    border-bottom-color:rgba(148,163,255,.25);
+  }
+  .exam-badge{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.35);color:#fff!important;-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+
+  /* ===== CIRCULAR CLOCK TIME PICKER ===== */
+  .clock-wrap{width:260px;max-width:78vw;margin:0 auto;position:relative;-webkit-user-select:none;user-select:none;touch-action:none}
+  .clock-face{
+    width:100%;aspect-ratio:1;border-radius:50%;position:relative;
+    background:radial-gradient(circle at 50% 42%, #12325f, #0b1e3b 70%);
+    border:3px solid var(--exb-gold);
+    box-shadow:0 14px 40px -14px rgba(0,0,0,.7), inset 0 0 30px rgba(0,0,0,.5);
+  }
+  .clock-tick{position:absolute;left:50%;top:6%;transform-origin:0 700%;width:2px;height:9px;background:rgba(201,162,39,.55)}
+  .clock-num{position:absolute;font-family:'Sora',sans-serif;font-weight:800;font-size:.82rem;
+    color:#e6c14b;transform:translate(-50%,-50%);pointer-events:none}
+  .clock-hand{position:absolute;left:50%;bottom:50%;width:4px;background:var(--exb-gold2);
+    transform-origin:bottom center;border-radius:4px;box-shadow:0 0 8px rgba(230,193,75,.5);transition:transform .15s ease}
+  .clock-hand.hour{height:24%;background:#fff;width:5px}
+  .clock-hand.minute{height:33%}
+  .clock-center{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;
+    background:var(--exb-gold);transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(11,30,59,.9);z-index:4}
+  .clock-knob{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--exb-gold2);
+    transform:translate(-50%,-50%);box-shadow:0 4px 10px rgba(0,0,0,.5);cursor:grab;z-index:5;
+    display:flex;align-items:center;justify-content:center;color:#0b1e3b;font-weight:800;font-size:.7rem}
+  .clock-knob:active{cursor:grabbing}
+  .clock-mode-btn{padding:.35rem .8rem;border-radius:.6rem;font-weight:700;font-size:1.25rem;font-family:'Sora',sans-serif;
+    background:rgba(255,255,255,.06);border:1px solid var(--exb-line);color:#e2e8f0;transition:.2s;min-width:64px}
+  .clock-mode-btn.active{background:linear-gradient(135deg,var(--exb-gold),var(--exb-gold2));color:#0b1e3b;border-color:transparent}
+  .ampm-btn{padding:.3rem .7rem;border-radius:.5rem;font-weight:700;font-size:.75rem;
+    background:rgba(255,255,255,.06);border:1px solid var(--exb-line);color:#cbd5e1;transition:.2s}
+  .ampm-btn.active{background:var(--exb-gold);color:#0b1e3b;border-color:transparent}
+
+  /* Duration stepper for each task */
+  .dur-step{width:34px;height:34px;border-radius:.6rem;background:rgba(255,255,255,.08);border:1px solid var(--exb-line);
+    color:#e6c14b;font-weight:800;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;transition:.15s}
+  .dur-step:hover{background:rgba(201,162,39,.2)}
+
+  /* Task notification popup — hidden well off-screen until .show is added.
+     (Previously it peeked into view on load because the negative offset was
+     too small, so it looked like the notification was "always showing".) */
+  #taskNotif{position:fixed;top:0;left:50%;
+    transform:translateX(-50%) translateY(-200%);
+    opacity:0;visibility:hidden;pointer-events:none;z-index:9999;
+    max-width:92vw;width:420px;
+    transition:transform .45s cubic-bezier(.16,1,.3,1), opacity .3s ease, visibility .45s}
+  #taskNotif.show{top:80px;transform:translateX(-50%) translateY(0);
+    opacity:1;visibility:visible;pointer-events:auto}
 </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-200 antialiased transition-colors duration-300">
+
+<!-- ============ TASK TIME-OVER NOTIFICATION ============ -->
+<div id="taskNotif">
+  <div class="rounded-2xl p-4 shadow-2xl flex items-start gap-3" style="background:linear-gradient(155deg,#0b1e3b,#10294f);border:2px solid #c9a227">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl" style="background:rgba(201,162,39,.15);color:#e6c14b"><i class="fas fa-bell"></i></div>
+    <div class="flex-1 min-w-0">
+      <p class="font-extrabold text-[#e6c14b] text-sm" id="taskNotifTitle">Task time over!</p>
+      <p class="text-slate-300 text-xs mt-0.5" id="taskNotifBody">Moving to your next task…</p>
+    </div>
+    <button onclick="document.getElementById('taskNotif').classList.remove('show')" class="w-7 h-7 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition flex-shrink-0"><i class="fas fa-xmark"></i></button>
+  </div>
+</div>
 
 <!-- ============ MINIMAL TOP BAR ============ -->
 <header id="topbar" class="fixed top-0 inset-x-0 z-50 glass border-b border-white/40 dark:border-white/5">
@@ -431,7 +753,7 @@ tailwind.config = {
         </div>
         <button onclick="goPage('notes')" class="text-sm font-semibold text-sunset-500 hover:text-sunset-600 flex items-center gap-1">All notes <i class="fas fa-arrow-right text-xs"></i></button>
       </div>
-      <div id="aimNotesPreview" class="grid grid-cols-2 lg:grid-cols-4 gap-5"></div>
+      <div id="aimNotesPreview" class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 items-stretch"></div>
     </div>
   </section>
 
@@ -624,21 +946,51 @@ tailwind.config = {
   <!-- search/filter -->
   <section class="py-10">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <!-- ===== Smart "For You" banner (auto-promotes each year based on account) ===== -->
+      <div id="notesSmartBanner" class="hidden reveal mb-8 rounded-2xl overflow-hidden shadow-lg border border-brand-100 dark:border-brand-500/20">
+        <div class="gradient-brand p-5 sm:p-6 flex flex-col sm:flex-row sm:items-center gap-4">
+          <div class="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center flex-shrink-0">
+            <i class="fas fa-wand-magic-sparkles text-white text-2xl"></i>
+          </div>
+          <div class="flex-1 min-w-0">
+            <p class="text-white/70 text-xs font-bold uppercase tracking-wider">Personalised for you</p>
+            <h3 id="smartTitle" class="text-white font-extrabold font-display text-lg sm:text-xl leading-snug"></h3>
+            <p id="smartSub" class="text-white/80 text-sm mt-1"></p>
+          </div>
+          <button id="smartApplyBtn" class="whitespace-nowrap px-5 py-2.5 bg-white text-brand-600 rounded-xl text-sm font-bold shadow hover:bg-brand-50 transition flex items-center gap-2">
+            <i class="fas fa-bolt"></i> Show my notes
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== Sign-in nudge (shown when signed out) ===== -->
+      <div id="notesSignedOut" class="hidden reveal mb-8 rounded-2xl bg-brand-50 dark:bg-slate-800 border border-brand-100 dark:border-slate-700 p-4 flex items-center gap-3">
+        <i class="fas fa-circle-user text-brand-500 text-xl"></i>
+        <p class="text-sm text-slate-600 dark:text-slate-300 flex-1">Sign in and tell us your class — Aimtor will automatically show the <b>right notes for your current stage</b>, and move you up every new year.</p>
+        <button onclick="if(window.openAuthModal)window.openAuthModal()" class="px-4 py-2 gradient-brand text-white rounded-xl text-sm font-semibold whitespace-nowrap">Sign in</button>
+      </div>
+
       <div class="max-w-md mx-auto mb-6 reveal">
         <div class="relative">
           <i class="fas fa-search absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"></i>
           <input id="notesSearch" type="text" placeholder="Search notes by title or subject..." class="w-full pl-11 pr-4 py-3 bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300">
         </div>
       </div>
-      <div id="notesCats" class="flex flex-wrap justify-center gap-3 mb-10 reveal">
-        <button data-cat="all" class="notes-cat px-5 py-2 rounded-full text-sm font-semibold gradient-coral text-white shadow-md">All</button>
-        <button data-cat="math" class="notes-cat px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300">Math</button>
-        <button data-cat="science" class="notes-cat px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300">Science</button>
-        <button data-cat="english" class="notes-cat px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300">English</button>
-        <button data-cat="ict" class="notes-cat px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300">ICT</button>
+
+      <!-- ===== Main category tabs: Academic / Admission / Job ===== -->
+      <div id="notesMainCats" class="flex flex-wrap justify-center gap-3 mb-5 reveal">
+        <button data-main="mine" class="notes-main px-5 py-2 rounded-full text-sm font-semibold gradient-coral text-white shadow-md flex items-center gap-2"><i class="fas fa-star"></i> For You</button>
+        <button data-main="academic" class="notes-main px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300 flex items-center gap-2"><i class="fas fa-graduation-cap"></i> Academic</button>
+        <button data-main="admission" class="notes-main px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300 flex items-center gap-2"><i class="fas fa-door-open"></i> Admission</button>
+        <button data-main="job" class="notes-main px-5 py-2 rounded-full text-sm font-semibold bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-sunset-300 flex items-center gap-2"><i class="fas fa-briefcase"></i> Job</button>
       </div>
+
+      <!-- ===== Sub-category chips (populated by JS per main category) ===== -->
+      <div id="notesSubCats" class="flex flex-wrap justify-center gap-2.5 mb-10 reveal"></div>
+
       <div id="notesGrid" class="notes-tumble"></div>
-      <p id="noNotes" class="hidden text-center text-slate-400 py-10"><i class="fas fa-file-circle-xmark text-3xl block mb-2"></i>No notes found.</p>
+      <p id="noNotes" class="hidden text-center text-slate-400 py-10"><i class="fas fa-file-circle-xmark text-3xl block mb-2"></i>No notes found for this stage yet — we're adding them soon.</p>
     </div>
   </section>
 
@@ -755,15 +1107,234 @@ tailwind.config = {
 <!-- ====================================================== -->
 <section id="page-mypower" class="page">
 
-  <section class="gradient-hero relative overflow-hidden py-14 lg:py-20">
-    <div class="absolute inset-0 grid-bg opacity-50"></div>
-    <div class="absolute top-0 right-0 w-80 h-80 bg-aqua-200/40 rounded-full blur-3xl"></div>
+  <section class="exam-strict-hero relative overflow-hidden py-14 lg:py-20">
+    <div class="absolute inset-0 grid-bg opacity-20"></div>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
-      <span class="inline-flex items-center gap-2 px-4 py-1.5 bg-white dark:bg-slate-800 rounded-full text-xs font-bold text-aqua-600 dark:text-aqua-400 shadow-sm mb-4"><i class="fas fa-bolt"></i> My Power</span>
-      <h1 class="text-3xl lg:text-5xl font-extrabold font-display text-slate-900 dark:text-white">Your <span class="gradient-text">power tools</span></h1>
-      <p class="text-slate-600 dark:text-slate-300 mt-4 max-w-2xl mx-auto">Track streaks, play smart flash cards, take quizzes, climb the leaderboard, focus with Pomodoro & ask the AI tutor.</p>
+      <span class="exam-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm mb-4"><i class="fas fa-award"></i> Examination Board</span>
+      <h1 class="text-3xl lg:text-5xl font-extrabold font-display text-white">My Power — <span class="exam-board-headline">Exam Control Board</span></h1>
+      <p class="text-white/80 mt-4 max-w-2xl mx-auto">A focused, disciplined study board. Set your exam, build a timed routine with a circular clock, get alerts when each task ends & auto-move to the next.</p>
     </div>
   </section>
+
+  <!-- ============================================================= -->
+  <!-- ===== EXAM POWER DASHBOARD (setup + door-style board) ======= -->
+  <!-- ============================================================= -->
+  <section id="examPower" class="py-12 lg:py-16">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+      <div class="text-center mb-10 reveal">
+        <span class="text-sm font-bold uppercase tracking-wider gradient-text">Official Examination Board</span>
+        <h2 class="text-3xl lg:text-4xl font-extrabold font-display text-slate-900 dark:text-white mt-2">Exam Power Board</h2>
+        <p class="text-slate-500 dark:text-slate-400 mt-3 max-w-xl mx-auto text-sm sm:text-base">Set your exam, date & a strict timed routine using the circular clock. Each task has its own duration — when time is over you get an alert and the next task starts automatically.</p>
+      </div>
+
+      <!-- ============ SETUP WIZARD ============ -->
+      <div id="epSetup" class="reveal">
+        <div class="max-w-2xl mx-auto bg-white dark:bg-slate-800 rounded-3xl shadow-2xl shadow-brand-500/10 border border-slate-100 dark:border-slate-700 overflow-hidden">
+          <!-- progress -->
+          <div class="h-1.5 bg-slate-100 dark:bg-slate-700"><div id="epProgress" class="h-full gradient-brand transition-all duration-500" style="width:33%"></div></div>
+
+          <div class="p-6 sm:p-9">
+            <!-- STEP 1 : exam name -->
+            <div class="ep-step" data-step="1">
+              <div class="w-14 h-14 rounded-2xl gradient-brand flex items-center justify-center text-white text-2xl mb-5 shadow-lg shadow-brand-500/30"><i class="fas fa-graduation-cap"></i></div>
+              <h3 class="text-xl sm:text-2xl font-extrabold font-display text-slate-900 dark:text-white">What's your exam?</h3>
+              <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-5">e.g. 1st / 2nd / 3rd Term, Half-Yearly, Annual, Admission Test.</p>
+              <input id="epExamName" type="text" placeholder="Exam name" class="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white text-sm focus:outline-none focus:border-brand-400 transition">
+              <div class="flex flex-wrap gap-2 mt-3" id="epExamChips">
+                <button type="button" class="ep-chip px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 hover:bg-brand-100 transition">1st Term</button>
+                <button type="button" class="ep-chip px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 hover:bg-brand-100 transition">Half-Yearly</button>
+                <button type="button" class="ep-chip px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 hover:bg-brand-100 transition">Annual</button>
+                <button type="button" class="ep-chip px-3 py-1.5 rounded-full text-xs font-semibold bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 hover:bg-brand-100 transition">Admission Test</button>
+              </div>
+              <div class="flex justify-between items-center mt-7">
+                <button id="epBackToBoard" class="hidden px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-200 transition"><i class="fas fa-arrow-left mr-1"></i> Back to Board</button>
+                <span class="epb2b-spacer"></span>
+                <button class="ep-next px-6 py-3 gradient-brand text-white font-semibold rounded-xl hover:scale-105 transition">Next <i class="fas fa-arrow-right ml-1"></i></button>
+              </div>
+            </div>
+
+            <!-- STEP 2 : exam date -->
+            <div class="ep-step hidden" data-step="2">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-sunset-500 to-amber-500 flex items-center justify-center text-white text-2xl mb-5 shadow-lg shadow-sunset-500/30"><i class="fas fa-calendar-day"></i></div>
+              <h3 class="text-xl sm:text-2xl font-extrabold font-display text-slate-900 dark:text-white">When is your exam?</h3>
+              <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-5">We'll run a live countdown timer for you.</p>
+              <input id="epExamDate" type="date" class="w-full px-4 py-3.5 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white text-sm focus:outline-none focus:border-brand-400 transition">
+              <div class="flex justify-between mt-7">
+                <button class="ep-back px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-200 transition"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <button class="ep-next px-6 py-3 gradient-brand text-white font-semibold rounded-xl hover:scale-105 transition">Next <i class="fas fa-arrow-right ml-1"></i></button>
+              </div>
+            </div>
+
+            <!-- STEP 3 : hard routine (circular clock) -->
+            <div class="ep-step hidden" data-step="3">
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0b1e3b] to-[#10294f] border border-[#c9a227] flex items-center justify-center text-[#e6c14b] text-2xl mb-5 shadow-lg"><i class="fas fa-clock"></i></div>
+              <h3 class="text-xl sm:text-2xl font-extrabold font-display text-slate-900 dark:text-white">Set a strict timed routine</h3>
+              <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-4">Use the circular clock to set each task's <b>start time</b>, then set how many <b>minutes</b> it should run. When time is over you'll get an alert & the next task starts.</p>
+
+              <!-- CIRCULAR CLOCK CARD -->
+              <div class="rounded-2xl p-4 sm:p-5 mb-4" style="background:linear-gradient(160deg,#0b1e3b,#0a1729);border:1px solid rgba(201,162,39,.35)">
+                <!-- digital readout + mode toggle -->
+                <div class="flex items-center justify-center gap-2 mb-4">
+                  <button type="button" id="clkHourBtn" class="clock-mode-btn active" data-mode="hour">04</button>
+                  <span class="text-2xl font-extrabold text-[#e6c14b]">:</span>
+                  <button type="button" id="clkMinBtn" class="clock-mode-btn" data-mode="minute">00</button>
+                  <div class="flex flex-col gap-1 ml-2">
+                    <button type="button" id="clkAM" class="ampm-btn">AM</button>
+                    <button type="button" id="clkPM" class="ampm-btn active">PM</button>
+                  </div>
+                </div>
+                <!-- the clock -->
+                <div class="clock-wrap" id="clockWrap">
+                  <div class="clock-face" id="clockFace">
+                    <div class="clock-hand hour" id="clkHandHour"></div>
+                    <div class="clock-hand minute" id="clkHandMin"></div>
+                    <div class="clock-center"></div>
+                    <div class="clock-knob" id="clockKnob">00</div>
+                  </div>
+                </div>
+                <p class="text-center text-[11px] text-slate-400 mt-3"><i class="fas fa-hand-pointer mr-1"></i>Tap a number or drag the knob. Switch between <b class="text-[#e6c14b]">hour</b> & <b class="text-[#e6c14b]">minute</b> above.</p>
+              </div>
+
+              <!-- task name + duration -->
+              <input id="epTaskName" type="text" placeholder="Task (e.g. Physics — Ch 4 problems)" class="w-full px-3 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white text-sm focus:outline-none focus:border-[#c9a227] mb-3">
+              <div class="flex items-center justify-between gap-2 mb-3 rounded-xl px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-600">
+                <span class="text-sm font-semibold text-slate-600 dark:text-slate-300"><i class="fas fa-hourglass-half mr-1 text-[#c9a227]"></i>Duration</span>
+                <div class="flex items-center gap-2">
+                  <button type="button" class="dur-step" data-d="-5">−</button>
+                  <span class="min-w-[74px] text-center font-extrabold text-slate-800 dark:text-white"><span id="epTaskDur">30</span> min</span>
+                  <button type="button" class="dur-step" data-d="5">+</button>
+                </div>
+              </div>
+              <button id="epAddTask" class="w-full px-4 py-3 text-white font-semibold rounded-xl text-sm hover:scale-[1.02] transition" style="background:linear-gradient(135deg,#c9a227,#e6c14b);color:#0b1e3b"><i class="fas fa-plus mr-1"></i> Add task to routine</button>
+
+              <div id="epTaskList" class="space-y-2 max-h-52 overflow-y-auto chat-scroll pr-1 my-3">
+                <p id="epTaskEmpty" class="text-slate-400 text-sm text-center py-6"><i class="fas fa-clipboard-list text-3xl block mb-2 opacity-50"></i>No tasks yet — add at least 3 for a strong routine.</p>
+              </div>
+
+              <div class="flex justify-between mt-4">
+                <button class="ep-back px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-200 transition"><i class="fas fa-arrow-left mr-1"></i> Back</button>
+                <button id="epFinish" class="px-6 py-3 text-white font-semibold rounded-xl hover:scale-105 transition" style="background:linear-gradient(135deg,#0b1e3b,#10294f);border:1px solid #c9a227"><i class="fas fa-gavel mr-1"></i> Build My Board</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ THE POWER BOARD (door-style) ============ -->
+      <div id="epBoard" class="hidden reveal">
+        <!-- shared SVG gradient for circular timers -->
+        <svg width="0" height="0" style="position:absolute"><defs>
+          <linearGradient id="epRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b7a6"/>
+          </linearGradient>
+        </defs></svg>
+        <div class="ep-door rounded-[2rem] p-5 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden">
+          <div class="exam-board-seal" title="Official Exam Board"><i class="fas fa-stamp"></i></div>
+
+          <!-- top bar: title + timer -->
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8 pb-6 border-b-2 border-dashed" style="border-color:rgba(255,255,255,.35)">
+            <div>
+              <p class="ep-hand text-xs uppercase tracking-widest text-white/60">Exam</p>
+              <h3 id="epBoardExam" class="ep-hand text-2xl sm:text-3xl font-extrabold text-white">—</h3>
+            </div>
+            <div class="ep-hand text-right">
+              <p class="text-xs uppercase tracking-widest text-white/60 mb-1">Exam Timer</p>
+              <div id="epTimer" class="flex items-center gap-2 justify-start sm:justify-end">
+                <div class="ep-tbox"><span id="epDays">00</span><small>days</small></div>
+                <div class="ep-tbox"><span id="epHours">00</span><small>hrs</small></div>
+                <div class="ep-tbox"><span id="epMins">00</span><small>min</small></div>
+                <div class="ep-tbox"><span id="epSecs">00</span><small>sec</small></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- top row: suggestion / calendar / performance -->
+          <div class="grid md:grid-cols-3 gap-5 mb-6">
+            <!-- Suggestion -->
+            <div class="ep-panel">
+              <h4 class="ep-title"><i class="fas fa-lightbulb text-gold-500 mr-2"></i>Suggestion</h4>
+              <ul id="epSuggestions" class="ep-hand space-y-2 text-sm text-white/90"></ul>
+            </div>
+            <!-- Calendar -->
+            <div class="ep-panel">
+              <h4 class="ep-title"><i class="fas fa-calendar text-brand-500 mr-2"></i>Calendar</h4>
+              <div id="epCalendar" class="grid grid-cols-7 gap-1 text-center text-[11px]"></div>
+              <div class="flex items-center gap-3 mt-3 text-[10px] text-white/70">
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-aqua-400"></span>Done</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-rose-400"></span>Missed</span>
+                <span class="flex items-center gap-1"><span class="w-2.5 h-2.5 rounded-sm bg-sunset-400"></span>Exam</span>
+              </div>
+            </div>
+            <!-- Performance -->
+            <div class="ep-panel">
+              <h4 class="ep-title"><i class="fas fa-chart-simple text-aqua-500 mr-2"></i>Performance</h4>
+              <div id="epPerformance" class="grid grid-cols-3 gap-2"></div>
+              <div class="mt-3 pt-3 border-t border-white/15 flex items-center justify-between">
+                <span class="text-xs text-white/70">Overall</span>
+                <span id="epOverall" class="ep-hand text-lg font-extrabold text-white">0%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- middle row: mistakes / SWOT -->
+          <div class="grid md:grid-cols-2 gap-5 mb-6">
+            <!-- Mistakes -->
+            <div class="ep-panel">
+              <h4 class="ep-title"><i class="fas fa-triangle-exclamation text-rose-500 mr-2"></i>What are you mistaking?</h4>
+              <ol id="epMistakes" class="ep-hand space-y-2 text-sm text-white/90 list-decimal list-inside"></ol>
+            </div>
+            <!-- SWOT -->
+            <div class="ep-panel">
+              <h4 class="ep-title"><i class="fas fa-compass text-plum-500 mr-2"></i>Your SWOT</h4>
+              <div class="ep-hand space-y-2 text-sm text-white/90">
+                <p><b class="text-aqua-300">Strength:</b> <span id="epStrength">—</span></p>
+                <p><b class="text-rose-300">Weakness:</b> <span id="epWeakness">—</span></p>
+                <p><b class="text-indigo-200">Opportunity:</b> <span id="epOpportunity">—</span></p>
+                <p><b class="text-amber-300">Threats:</b> <span id="epThreats">—</span></p>
+              </div>
+            </div>
+          </div>
+
+          <!-- routine table -->
+          <div class="ep-panel">
+            <div class="flex items-center justify-between mb-3">
+              <h4 class="ep-title mb-0"><i class="fas fa-table-list text-aqua-300 mr-2"></i>Your routine</h4>
+              <span id="epRoutineStat" class="text-xs font-semibold text-white/70">0 / 0 done</span>
+            </div>
+            <div class="overflow-x-auto">
+              <table class="ep-table w-full text-sm ep-hand">
+                <thead>
+                  <tr>
+                    <th class="w-20">Time</th>
+                    <th>Task</th>
+                    <th class="w-16 text-center">Length</th>
+                    <th class="w-24 text-center">Time Left</th>
+                    <th class="w-24 text-center">Done or not</th>
+                    <th class="w-48">Reason (if not done)</th>
+                    <th class="w-10 text-center"></th>
+                  </tr>
+                </thead>
+                <tbody id="epRoutineBody"></tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- actions -->
+          <div class="flex flex-wrap items-center justify-between gap-3 mt-7">
+            <p class="text-xs text-white/60"><i class="fas fa-circle-info mr-1"></i>Tick tasks daily — the circular timer shows time left for each task & alerts + auto-advances when time is over.</p>
+            <div class="flex flex-wrap gap-2">
+              <button id="epAddMore" class="px-4 py-2.5 font-semibold rounded-xl text-sm hover:scale-105 transition" style="background:linear-gradient(135deg,#c9a227,#e6c14b);color:#0b1e3b"><i class="fas fa-plus mr-1"></i> Add / edit tasks</button>
+              <button id="epEdit" class="px-4 py-2.5 bg-white/15 text-white font-semibold rounded-xl text-sm hover:bg-white/25 transition border border-white/25 backdrop-blur"><i class="fas fa-pen mr-1"></i> Edit setup</button>
+              <button id="epReset" class="px-4 py-2.5 bg-rose-500/90 text-white font-semibold rounded-xl text-sm hover:bg-rose-500 transition"><i class="fas fa-rotate-left mr-1"></i> Reset</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+  <!-- /EXAM POWER DASHBOARD -->
 
   <!-- STREAK + GOALS -->
   <section id="streak" class="py-14">
@@ -1188,24 +1759,48 @@ tailwind.config = {
   </div>
 </div>
 
-<!-- Video upload modal -->
+<!-- Upload modal (Class / Notes / Library) -->
 <div id="uploadModal" class="fixed inset-0 z-[110] hidden items-center justify-center p-3 sm:p-6">
   <div id="uploadModalBg" class="absolute inset-0 bg-slate-950/70 backdrop-blur-sm"></div>
   <div class="relative bg-white dark:bg-slate-800 rounded-3xl shadow-2xl max-w-lg w-full max-h-[92vh] overflow-y-auto chat-scroll">
     <button id="closeUpload" class="absolute top-4 right-4 z-10 w-9 h-9 rounded-full bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-200 flex items-center justify-center hover:scale-110 transition"><i class="fas fa-xmark"></i></button>
-    <div class="gradient-coral p-6 text-white">
-      <h3 class="text-xl font-extrabold font-display flex items-center gap-2"><i class="fas fa-cloud-arrow-up"></i> Aimtor Studio</h3>
-      <p class="text-white/85 text-sm mt-1">Share your lesson with thousands of students.</p>
+
+    <!-- Header (dynamic) -->
+    <div id="upHeader" class="gradient-coral p-6 text-white">
+      <button id="upBackBtn" class="hidden absolute top-5 left-4 z-10 w-9 h-9 rounded-full bg-white/20 text-white flex items-center justify-center hover:bg-white/30 transition"><i class="fas fa-arrow-left"></i></button>
+      <h3 id="upHeaderTitle" class="text-xl font-extrabold font-display flex items-center gap-2 ml-10"><i class="fas fa-cloud-arrow-up"></i> Aimtor Studio</h3>
+      <p id="upHeaderSub" class="text-white/85 text-sm mt-1 ml-10">What would you like to upload today?</p>
     </div>
-    <form id="uploadForm" class="p-6 space-y-4">
+
+    <!-- STEP 1: pick a type -->
+    <div id="upTypePicker" class="p-6 space-y-3">
+      <button data-type="class" class="up-type-btn w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 hover:bg-brand-50/50 dark:hover:bg-brand-500/10 transition text-left">
+        <span class="w-12 h-12 rounded-xl gradient-brand text-white flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-play"></i></span>
+        <span class="flex-1"><span class="block font-bold text-slate-900 dark:text-white">Class</span><span class="block text-xs text-slate-500 dark:text-slate-400">Upload a video lesson to the Class library.</span></span>
+        <i class="fas fa-chevron-right text-slate-300 dark:text-slate-600"></i>
+      </button>
+      <button data-type="notes" class="up-type-btn w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-sunset-400 dark:hover:border-sunset-500 hover:bg-sunset-50/50 dark:hover:bg-sunset-500/10 transition text-left">
+        <span class="w-12 h-12 rounded-xl bg-gradient-to-br from-sunset-500 to-amber-500 text-white flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-book-open"></i></span>
+        <span class="flex-1"><span class="block font-bold text-slate-900 dark:text-white">Notes</span><span class="block text-xs text-slate-500 dark:text-slate-400">Share chapter notes, past papers &amp; PDFs.</span></span>
+        <i class="fas fa-chevron-right text-slate-300 dark:text-slate-600"></i>
+      </button>
+      <button data-type="library" class="up-type-btn w-full flex items-center gap-4 p-4 rounded-2xl border-2 border-slate-200 dark:border-slate-700 hover:border-plum-400 dark:hover:border-plum-500 hover:bg-plum-50/50 dark:hover:bg-plum-500/10 transition text-left">
+        <span class="w-12 h-12 rounded-xl gradient-plum text-white flex items-center justify-center text-lg flex-shrink-0"><i class="fas fa-book-bookmark"></i></span>
+        <span class="flex-1"><span class="block font-bold text-slate-900 dark:text-white">Library Book</span><span class="block text-xs text-slate-500 dark:text-slate-400">Add an e-book to the Aimtor Library.</span></span>
+        <i class="fas fa-chevron-right text-slate-300 dark:text-slate-600"></i>
+      </button>
+    </div>
+
+    <!-- STEP 2a: CLASS (video) form -->
+    <form id="uploadForm" class="hidden p-6 space-y-4">
       <div>
         <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Lesson title *</label>
-        <input id="upTitle" type="text" required placeholder="e.g. Mastering Integration" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-coral-300">
+        <input id="upTitle" type="text" placeholder="e.g. Mastering Integration" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-coral-300">
       </div>
       <div class="grid grid-cols-2 gap-3">
         <div>
           <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Tutor name *</label>
-          <input id="upTutor" type="text" required placeholder="Your name" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-coral-300">
+          <input id="upTutor" type="text" placeholder="Your name" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-coral-300">
         </div>
         <div>
           <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Category *</label>
@@ -1239,6 +1834,110 @@ tailwind.config = {
         <div class="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div id="upBar" class="h-full gradient-coral w-0 transition-all"></div></div>
       </div>
       <button type="submit" id="upSubmit" class="w-full py-3 gradient-coral text-white font-semibold rounded-xl shadow-lg shadow-coral-500/30 hover:scale-[1.02] transition flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Publish Lesson</button>
+      <p class="text-center text-xs text-slate-400">By uploading you agree to share educational content responsibly.</p>
+    </form>
+
+    <!-- STEP 2b: NOTES form -->
+    <form id="notesUploadForm" class="hidden p-6 space-y-4">
+      <div>
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Note title *</label>
+        <input id="nUpTitle" type="text" placeholder="e.g. Physics — Chapter 5: Work &amp; Energy" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Subject *</label>
+          <input id="nUpSubject" type="text" placeholder="e.g. Physics" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Category *</label>
+          <select id="nUpMain" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300 text-slate-700 dark:text-slate-200">
+            <option value="academic">Academic</option>
+            <option value="admission">Admission</option>
+            <option value="job">Job</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Class / stage</label>
+          <input id="nUpStage" type="text" placeholder="e.g. Class 9, Medical, BCS" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Pages</label>
+          <input id="nUpPages" type="number" min="1" placeholder="e.g. 24" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300">
+        </div>
+      </div>
+      <div>
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Short description</label>
+        <textarea id="nUpBlurb" rows="2" placeholder="What does this note cover?" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-sunset-300 resize-none"></textarea>
+      </div>
+      <div>
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">PDF / document file *</label>
+        <label id="nDropzone" class="dropzone mt-1.5 flex flex-col items-center justify-center gap-2 px-4 py-8 bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 cursor-pointer transition text-center">
+          <i class="fas fa-file-pdf text-3xl text-sunset-500"></i>
+          <p class="text-sm text-slate-600 dark:text-slate-300"><span class="font-semibold text-sunset-600">Click to choose</span> or drag a file here</p>
+          <p id="nFileInfo" class="text-xs text-slate-400">PDF, DOC, PPT, images • up to 50 MB</p>
+          <input id="nUpFile" type="file" accept=".pdf,.doc,.docx,.ppt,.pptx,image/*" class="hidden">
+        </label>
+      </div>
+      <div id="nUpProgressWrap" class="hidden">
+        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-1"><span>Uploading...</span><span id="nUpPct">0%</span></div>
+        <div class="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div id="nUpBar" class="h-full bg-gradient-to-r from-sunset-500 to-amber-500 w-0 transition-all"></div></div>
+      </div>
+      <button type="submit" id="nUpSubmit" class="w-full py-3 bg-gradient-to-r from-sunset-500 to-amber-500 text-white font-semibold rounded-xl shadow-lg shadow-sunset-500/30 hover:scale-[1.02] transition flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Publish Note</button>
+      <p class="text-center text-xs text-slate-400">By uploading you agree to share educational content responsibly.</p>
+    </form>
+
+    <!-- STEP 2c: LIBRARY BOOK form -->
+    <form id="libUploadForm" class="hidden p-6 space-y-4">
+      <div>
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Book title *</label>
+        <input id="bUpTitle" type="text" placeholder="e.g. The Cosmos Explained" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Author *</label>
+          <input id="bUpAuthor" type="text" placeholder="Author name" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Category *</label>
+          <select id="bUpCat" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300 text-slate-700 dark:text-slate-200">
+            <option value="science">Science</option>
+            <option value="math">Math</option>
+            <option value="literature">Literature</option>
+            <option value="history">History</option>
+            <option value="tech">Technology</option>
+          </select>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Pages</label>
+          <input id="bUpPages" type="number" min="1" placeholder="e.g. 312" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300">
+        </div>
+        <div>
+          <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Year</label>
+          <input id="bUpYear" type="number" min="1900" max="2100" placeholder="e.g. 2024" class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300">
+        </div>
+      </div>
+      <div>
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Description</label>
+        <textarea id="bUpDesc" rows="2" placeholder="A short summary of the book..." class="mt-1.5 w-full px-4 py-2.5 bg-slate-50 dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-700 text-sm focus:outline-none focus:ring-2 focus:ring-plum-300 resize-none"></textarea>
+      </div>
+      <div>
+        <label class="text-sm font-semibold text-slate-700 dark:text-slate-200">Book file (PDF / e-book) *</label>
+        <label id="bDropzone" class="dropzone mt-1.5 flex flex-col items-center justify-center gap-2 px-4 py-8 bg-slate-50 dark:bg-slate-900 rounded-xl border-2 border-dashed border-slate-300 dark:border-slate-600 cursor-pointer transition text-center">
+          <i class="fas fa-book text-3xl text-plum-500"></i>
+          <p class="text-sm text-slate-600 dark:text-slate-300"><span class="font-semibold text-plum-600">Click to choose</span> or drag a file here</p>
+          <p id="bFileInfo" class="text-xs text-slate-400">PDF, EPUB • up to 50 MB</p>
+          <input id="bUpFile" type="file" accept=".pdf,.epub,application/pdf" class="hidden">
+        </label>
+      </div>
+      <div id="bUpProgressWrap" class="hidden">
+        <div class="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 mb-1"><span>Uploading...</span><span id="bUpPct">0%</span></div>
+        <div class="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div id="bUpBar" class="h-full gradient-plum w-0 transition-all"></div></div>
+      </div>
+      <button type="submit" id="bUpSubmit" class="w-full py-3 gradient-plum text-white font-semibold rounded-xl shadow-lg shadow-plum-500/30 hover:scale-[1.02] transition flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Publish Book</button>
       <p class="text-center text-xs text-slate-400">By uploading you agree to share educational content responsibly.</p>
     </form>
   </div>
@@ -1610,16 +2309,42 @@ window.addEventListener('resize',()=>{ clearTimeout(navResizeT); navResizeT=setT
 setTimeout(()=>navHint.classList.add('show'),900);
 setTimeout(()=>navHint.classList.remove('show'),4200);
 
-/* ===== Supabase config ===== */
+/* ===== Supabase config =====
+   Three separate Supabase projects:
+   • sb        → Class / video lessons + Auth  (videos project)
+   • sbNotes   → Notes uploads                 (notes project)
+   • sbLib     → Library book uploads          (library project)
+============================================================ */
 const SUPABASE_URL = 'https://fubmxgczsbtoopxoxjbg.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1Ym14Z2N6c2J0b29weG94amJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDU0OTcsImV4cCI6MjA5ODU4MTQ5N30.8DpDi5CPCOystSC4u0EtRh0njv6iegYDr61qUapWPUA';
 const VIDEO_BUCKET = 'videos';
-let sb = null;
+
+/* --- Notes project --- */
+const NOTES_SUPABASE_URL = 'https://nyxwmeioqswxpfypmjne.supabase.co';
+const NOTES_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im55eHdtZWlvcXN3eHBmeXBtam5lIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM0ODY5OTEsImV4cCI6MjA5OTA2Mjk5MX0.lSueI4F9fSpYbqJxyOIbtGoaQ9fBx7jQrf1uROdlfRM';
+const NOTES_BUCKET = 'notes';
+
+/* --- Library project --- */
+const LIB_SUPABASE_URL = 'https://jcebhfglagsgzknrvlel.supabase.co';
+const LIB_SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpjZWJoZmdsYWdzZ3prbnJ2bGVsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM1NTc4MTksImV4cCI6MjA5OTEzMzgxOX0.plOedD46_JY07y3kzomSzIM1iZBTyyIFpVb-xgsMLkg';
+const LIB_BUCKET = 'books';
+
+let sb = null, sbNotes = null, sbLib = null;
 try {
   sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
   });
-} catch(e){ console.warn('Supabase init failed', e); }
+} catch(e){ console.warn('Supabase (videos) init failed', e); }
+try {
+  sbNotes = window.supabase.createClient(NOTES_SUPABASE_URL, NOTES_SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
+} catch(e){ console.warn('Supabase (notes) init failed', e); }
+try {
+  sbLib = window.supabase.createClient(LIB_SUPABASE_URL, LIB_SUPABASE_ANON_KEY, {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false }
+  });
+} catch(e){ console.warn('Supabase (library) init failed', e); }
 
 /* ===== Theme toggle ===== */
 const root = document.documentElement;
@@ -1770,14 +2495,59 @@ document.addEventListener('keydown',e=>{
 function playFeatured(){ if(videos.length) playVideo(videos[0].id); }
 document.getElementById('featuredBanner').addEventListener('click',playFeatured);
 
-/* ===== Video Upload ===== */
+/* ===== Upload system (Class / Notes / Library) ===== */
 const uploadModal=document.getElementById('uploadModal'), uploadForm=document.getElementById('uploadForm');
+const notesUploadForm=document.getElementById('notesUploadForm'), libUploadForm=document.getElementById('libUploadForm');
+const upTypePicker=document.getElementById('upTypePicker');
+const upHeader=document.getElementById('upHeader'), upHeaderTitle=document.getElementById('upHeaderTitle'),
+      upHeaderSub=document.getElementById('upHeaderSub'), upBackBtn=document.getElementById('upBackBtn');
 const upFile=document.getElementById('upFile'), dropzone=document.getElementById('dropzone'), fileInfo=document.getElementById('fileInfo');
-function openUpload(){ uploadModal.classList.remove('hidden'); uploadModal.classList.add('flex'); document.body.style.overflow='hidden'; }
+
+/* header styling per type */
+const UP_TYPES = {
+  class:   { grad:'gradient-coral',                              icon:'fa-play',          title:'Aimtor Studio — Class',   sub:'Share your video lesson with thousands of students.' },
+  notes:   { grad:'bg-gradient-to-r from-sunset-500 to-amber-500', icon:'fa-book-open',   title:'Aimtor Studio — Notes',   sub:'Upload chapter notes, past papers & PDFs.' },
+  library: { grad:'gradient-plum',                               icon:'fa-book-bookmark', title:'Aimtor Studio — Library', sub:'Add an e-book to the Aimtor Library.' },
+};
+const HEADER_GRADS = ['gradient-coral','gradient-plum','bg-gradient-to-r','from-sunset-500','to-amber-500'];
+
+function showUploadStep(type){
+  // hide all forms + picker
+  upTypePicker.classList.add('hidden');
+  uploadForm.classList.add('hidden');
+  notesUploadForm.classList.add('hidden');
+  libUploadForm.classList.add('hidden');
+  // reset header classes
+  upHeader.classList.remove(...HEADER_GRADS);
+  if(!type){
+    // back to picker
+    upHeader.classList.add('gradient-coral');
+    upHeaderTitle.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Aimtor Studio';
+    upHeaderSub.textContent = 'What would you like to upload today?';
+    upBackBtn.classList.add('hidden');
+    upHeaderTitle.classList.remove('ml-10'); upHeaderSub.classList.remove('ml-10');
+    upTypePicker.classList.remove('hidden');
+    return;
+  }
+  const t = UP_TYPES[type];
+  t.grad.split(' ').forEach(c=>upHeader.classList.add(c));
+  upHeaderTitle.innerHTML = `<i class="fas ${t.icon}"></i> ${t.title}`;
+  upHeaderSub.textContent = t.sub;
+  upBackBtn.classList.remove('hidden');
+  upHeaderTitle.classList.add('ml-10'); upHeaderSub.classList.add('ml-10');
+  if(type==='class')   uploadForm.classList.remove('hidden');
+  if(type==='notes')   notesUploadForm.classList.remove('hidden');
+  if(type==='library') libUploadForm.classList.remove('hidden');
+}
+
+function openUpload(){ showUploadStep(null); uploadModal.classList.remove('hidden'); uploadModal.classList.add('flex'); document.body.style.overflow='hidden'; }
 function closeUploadModal(){ uploadModal.classList.add('hidden'); uploadModal.classList.remove('flex'); document.body.style.overflow=''; }
 ['openUploadBtn','openUploadBtn2'].forEach(id=>document.getElementById(id)?.addEventListener('click',openUpload));
 document.getElementById('closeUpload').addEventListener('click',closeUploadModal);
 document.getElementById('uploadModalBg').addEventListener('click',closeUploadModal);
+document.querySelectorAll('.up-type-btn').forEach(b=>b.addEventListener('click',()=>showUploadStep(b.dataset.type)));
+upBackBtn.addEventListener('click',()=>showUploadStep(null));
+
 let selectedFile=null;
 function setFile(f){
   if(!f) return;
@@ -1822,31 +2592,120 @@ uploadForm.addEventListener('submit',async e=>{
   }
 });
 
+/* ---- shared helper: file picker + dropzone wiring for docs ---- */
+function wireDocDropzone(inputId, zoneId, infoId, accept, onPick){
+  const input=document.getElementById(inputId), zone=document.getElementById(zoneId), info=document.getElementById(infoId);
+  const defaultInfo=info.textContent;
+  function set(f){
+    if(!f) return;
+    if(f.size>50*1024*1024){ showAppToast('File too large (max 50 MB).'); onPick(null); info.textContent=defaultInfo; return; }
+    onPick(f); info.innerHTML=`<i class="fas fa-circle-check text-aqua-500"></i> ${f.name} • ${(f.size/1048576).toFixed(1)} MB`;
+  }
+  input.addEventListener('change',e=>set(e.target.files[0]));
+  ['dragenter','dragover'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.add('dragover');}));
+  ['dragleave','drop'].forEach(ev=>zone.addEventListener(ev,e=>{e.preventDefault();zone.classList.remove('dragover');}));
+  zone.addEventListener('drop',e=>set(e.dataTransfer.files[0]));
+  return ()=>{ info.textContent=defaultInfo; };
+}
+function fakeProgress(bar,pct){ let p=0; return setInterval(()=>{ p=Math.min(92,p+Math.random()*12); bar.style.width=p+'%'; pct.textContent=Math.floor(p)+'%'; },250); }
+
+/* ===== Notes Upload ===== */
+let selectedNoteFile=null;
+const resetNoteInfo = wireDocDropzone('nUpFile','nDropzone','nFileInfo','', f=>{ selectedNoteFile=f; });
+notesUploadForm.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const title=document.getElementById('nUpTitle').value.trim();
+  const subject=document.getElementById('nUpSubject').value.trim();
+  const main=document.getElementById('nUpMain').value;
+  const stage=document.getElementById('nUpStage').value.trim();
+  const pages=parseInt(document.getElementById('nUpPages').value,10)||null;
+  const blurb=document.getElementById('nUpBlurb').value.trim();
+  if(!title||!subject||!selectedNoteFile){ showAppToast('Please fill required fields and pick a file.'); return; }
+  if(!sbNotes){ showAppToast('Notes storage not connected.'); return; }
+  const submit=document.getElementById('nUpSubmit'); submit.disabled=true; submit.innerHTML='<i class="fas fa-spinner spin mr-1"></i> Uploading...';
+  const wrap=document.getElementById('nUpProgressWrap'), bar=document.getElementById('nUpBar'), pct=document.getElementById('nUpPct');
+  wrap.classList.remove('hidden'); const pv=fakeProgress(bar,pct);
+  try{
+    const ext=(selectedNoteFile.name.split('.').pop()||'pdf').toLowerCase();
+    const path=`notes/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+    const { error:upErr } = await sbNotes.storage.from(NOTES_BUCKET).upload(path, selectedNoteFile, { cacheControl:'3600', upsert:false, contentType:selectedNoteFile.type||'application/octet-stream' });
+    if(upErr) throw upErr;
+    const { data:pub } = sbNotes.storage.from(NOTES_BUCKET).getPublicUrl(path);
+    const { error:insErr } = await sbNotes.from('notes').insert([{ title, subject, main_category:main, stage, pages, blurb, file_url:pub.publicUrl, storage_path:path }]);
+    if(insErr) throw insErr;
+    clearInterval(pv); bar.style.width='100%'; pct.textContent='100%';
+    showAppToast('Note published! 📄');
+    setTimeout(()=>{ closeUploadModal(); notesUploadForm.reset(); selectedNoteFile=null; resetNoteInfo(); wrap.classList.add('hidden'); bar.style.width='0%'; loadUploadedNotes(); },800);
+  }catch(err){ clearInterval(pv); console.error(err); showAppToast('Upload failed: '+(err.message||'check storage bucket')); wrap.classList.add('hidden'); }
+  finally{ submit.disabled=false; submit.innerHTML='<i class="fas fa-paper-plane"></i> Publish Note'; }
+});
+
+/* ===== Library Book Upload ===== */
+let selectedBookFile=null;
+const resetBookInfo = wireDocDropzone('bUpFile','bDropzone','bFileInfo','', f=>{ selectedBookFile=f; });
+libUploadForm.addEventListener('submit',async e=>{
+  e.preventDefault();
+  const title=document.getElementById('bUpTitle').value.trim();
+  const author=document.getElementById('bUpAuthor').value.trim();
+  const cat=document.getElementById('bUpCat').value;
+  const pages=parseInt(document.getElementById('bUpPages').value,10)||null;
+  const year=parseInt(document.getElementById('bUpYear').value,10)||new Date().getFullYear();
+  const desc=document.getElementById('bUpDesc').value.trim();
+  if(!title||!author||!selectedBookFile){ showAppToast('Please fill required fields and pick a file.'); return; }
+  if(!sbLib){ showAppToast('Library storage not connected.'); return; }
+  const submit=document.getElementById('bUpSubmit'); submit.disabled=true; submit.innerHTML='<i class="fas fa-spinner spin mr-1"></i> Uploading...';
+  const wrap=document.getElementById('bUpProgressWrap'), bar=document.getElementById('bUpBar'), pct=document.getElementById('bUpPct');
+  wrap.classList.remove('hidden'); const pv=fakeProgress(bar,pct);
+  try{
+    const ext=(selectedBookFile.name.split('.').pop()||'pdf').toLowerCase();
+    const path=`books/${Date.now()}-${Math.random().toString(36).slice(2,8)}.${ext}`;
+    const { error:upErr } = await sbLib.storage.from(LIB_BUCKET).upload(path, selectedBookFile, { cacheControl:'3600', upsert:false, contentType:selectedBookFile.type||'application/octet-stream' });
+    if(upErr) throw upErr;
+    const { data:pub } = sbLib.storage.from(LIB_BUCKET).getPublicUrl(path);
+    const { error:insErr } = await sbLib.from('books').insert([{ title, author, category:cat, pages, year, description:desc, file_url:pub.publicUrl, storage_path:path }]);
+    if(insErr) throw insErr;
+    clearInterval(pv); bar.style.width='100%'; pct.textContent='100%';
+    showAppToast('Book published! 📚');
+    setTimeout(()=>{ closeUploadModal(); libUploadForm.reset(); selectedBookFile=null; resetBookInfo(); wrap.classList.add('hidden'); bar.style.width='0%'; loadUploadedBooks(); },800);
+  }catch(err){ clearInterval(pv); console.error(err); showAppToast('Upload failed: '+(err.message||'check storage bucket')); wrap.classList.add('hidden'); }
+  finally{ submit.disabled=false; submit.innerHTML='<i class="fas fa-paper-plane"></i> Publish Book'; }
+});
+
 /* ===== Toast ===== */
 let appToastTimer=null;
 function showAppToast(msg){ const t=document.getElementById('appToast'); t.textContent=msg; t.classList.remove('opacity-0'); t.classList.add('opacity-100'); clearTimeout(appToastTimer); appToastTimer=setTimeout(()=>{t.classList.add('opacity-0');t.classList.remove('opacity-100');},2400); }
 
-/* ===== NOTES page data + render ===== */
-const notesData = [
-  { title:'Algebra Basics', cat:'math', subject:'Math', pages:24, icon:'fa-square-root-variable', color:'brand' },
-  { title:'Atomic Structure', cat:'science', subject:'Chemistry', pages:18, icon:'fa-atom', color:'coral' },
-  { title:'Essay Writing', cat:'english', subject:'English', pages:12, icon:'fa-pen-fancy', color:'plum' },
-  { title:'Intro to Coding', cat:'ict', subject:'ICT', pages:30, icon:'fa-code', color:'gold' },
-  { title:'Trigonometry', cat:'math', subject:'Math', pages:22, icon:'fa-ruler-combined', color:'brand' },
-  { title:'Newton’s Laws', cat:'science', subject:'Physics', pages:16, icon:'fa-rocket', color:'aqua' },
-  { title:'Tenses & Grammar', cat:'english', subject:'English', pages:14, icon:'fa-book', color:'plum' },
-  { title:'Databases 101', cat:'ict', subject:'ICT', pages:26, icon:'fa-database', color:'gold' },
-  { title:'Calculus Intro', cat:'math', subject:'Math', pages:28, icon:'fa-infinity', color:'brand' },
-  { title:'Cell Biology', cat:'science', subject:'Biology', pages:20, icon:'fa-dna', color:'aqua' },
-  { title:'Poetry Analysis', cat:'english', subject:'English', pages:10, icon:'fa-feather', color:'plum' },
-  { title:'Networking Basics', cat:'ict', subject:'ICT', pages:24, icon:'fa-network-wired', color:'gold' },
-];
+/* ============================================================
+   SMART NOTES ENGINE
+   --------------------------------------------------------------
+   Notes are organised in a category TREE:
+     • Academic  → Class 1 … Class 12  (stage moves up every year)
+     • Admission → Cadet College, Government College, Medical, BUET, Universities
+     • Job       → Government
+
+   "Fresh at running time":  When a student signs in they tell us
+   their class AND the year they set it (captured automatically the
+   first time we see their grade). Every calendar year that passes,
+   we auto-promote them one class.  So a Class 9 student who joined
+   in 2026 automatically sees Class 10 notes in 2027, Class 11 in
+   2028, and so on — with NO profile editing.
+
+   The promotion is computed live from `new Date()`, so the notes
+   are always correct for the *running* time.
+============================================================ */
+
+/* ---- shared palette (kept from original) ---- */
+/* FIX: added a `sunset` entry to every map. `sunset` is used in
+   NOTE_COLOR_CYCLE (below) for uploaded notes, so without these keys
+   every 6th uploaded note rendered with `undefined` classes — no icon
+   background and an unstyled download button. */
 const NOTE_COLORS = {
   brand:'bg-brand-100 dark:bg-brand-500/20 text-brand-600',
   coral:'bg-coral-100 dark:bg-coral-500/20 text-coral-600',
   plum:'bg-plum-100 dark:bg-plum-500/20 text-plum-500',
   gold:'bg-gold-100/60 dark:bg-gold-500/10 text-gold-600',
   aqua:'bg-aqua-100 dark:bg-aqua-500/20 text-aqua-600',
+  sunset:'bg-sunset-100 dark:bg-sunset-500/20 text-sunset-600',
 };
 const NOTE_BTN = {
   brand:'bg-brand-50 dark:bg-brand-500/10 text-brand-600 dark:text-brand-300 hover:bg-brand-100',
@@ -1854,45 +2713,291 @@ const NOTE_BTN = {
   plum:'bg-plum-50 dark:bg-plum-500/10 text-plum-600 dark:text-plum-400 hover:bg-plum-100',
   gold:'bg-gold-100/60 dark:bg-gold-500/10 text-gold-600 dark:text-gold-400 hover:bg-gold-100',
   aqua:'bg-aqua-50 dark:bg-aqua-500/10 text-aqua-600 dark:text-aqua-400 hover:bg-aqua-100',
+  sunset:'bg-sunset-50 dark:bg-sunset-500/10 text-sunset-600 dark:text-sunset-400 hover:bg-sunset-100',
 };
-const NOTE_BAR = { brand:'gradient-brand', coral:'gradient-coral', plum:'gradient-plum', gold:'gradient-plum-gold', aqua:'gradient-aqua' };
-const NOTE_BLURB = {
-  math:'Step-by-step worked examples with every key formula highlighted.',
-  science:'Clear diagrams, definitions & exam-ready summaries.',
-  english:'Structure, techniques and model answers explained simply.',
-  ict:'Concepts, code snippets and practical walkthroughs.',
+const NOTE_BAR = { brand:'gradient-brand', coral:'gradient-coral', plum:'gradient-plum', gold:'gradient-plum-gold', aqua:'gradient-aqua', sunset:'gradient-coral' };
+
+/* ---- academic subject set repeated per class (demo dataset) ---- */
+const ACADEMIC_SUBJECTS = [
+  { subject:'Mathematics', icon:'fa-square-root-variable', color:'brand' },
+  { subject:'Science',     icon:'fa-flask',                color:'aqua'  },
+  { subject:'English',     icon:'fa-book',                 color:'plum'  },
+  { subject:'Bangla',      icon:'fa-language',             color:'coral' },
+  { subject:'ICT',         icon:'fa-code',                 color:'gold'  },
+];
+
+/* build one "chapter notes" record */
+function mkNote(o){ return Object.assign({ pages: 12 + ((o.subject.length*3)%22), blurb:'' }, o); }
+
+/* ---- full notes catalogue built from the category tree ---- */
+const notesData = [];
+// Academic: Class 1..12
+for(let c=1;c<=12;c++){
+  ACADEMIC_SUBJECTS.forEach(s=>{
+    notesData.push(mkNote({
+      main:'academic', sub:'class'+c,
+      title:`${s.subject} — Class ${c}`,
+      subject:s.subject, icon:s.icon, color:s.color,
+      blurb:`Chapter-wise Class ${c} ${s.subject} notes, formulas & exam summaries.`
+    }));
+  });
+}
+// Admission tracks
+const ADMISSION = [
+  { sub:'cadet',   label:'Cadet College',       icon:'fa-shield-halved', color:'brand', subs:['Math','English','GK & IQ'] },
+  { sub:'govtcol', label:'Government College',   icon:'fa-building-columns', color:'aqua', subs:['Bangla','English','General Knowledge'] },
+  { sub:'medical', label:'Medical',             icon:'fa-user-doctor', color:'coral', subs:['Biology','Chemistry','Physics','English','GK'] },
+  { sub:'buet',    label:'BUET',                icon:'fa-compass-drafting', color:'plum', subs:['Higher Math','Physics','Chemistry'] },
+  { sub:'univ',    label:'Universities',         icon:'fa-graduation-cap', color:'gold', subs:['Bangla','English','GK','Analytical'] },
+];
+ADMISSION.forEach(a=>{
+  a.subs.forEach((sub,i)=>{
+    notesData.push(mkNote({
+      main:'admission', sub:a.sub,
+      title:`${a.label} — ${sub}`,
+      subject:sub, icon:a.icon, color:a.color,
+      blurb:`${a.label} admission preparation: ${sub} concepts, question bank & shortcuts.`
+    }));
+  });
+});
+// Job tracks
+const JOBS = [
+  { sub:'govt', label:'Government', icon:'fa-landmark', color:'brand', subs:['Bangla','English','Math','General Knowledge','Current Affairs'] },
+];
+JOBS.forEach(j=>{
+  j.subs.forEach(sub=>{
+    notesData.push(mkNote({
+      main:'job', sub:j.sub,
+      title:`Govt Job — ${sub}`,
+      subject:sub, icon:j.icon, color:j.color,
+      blurb:`Government job / BCS preparation: ${sub} notes, model questions & tips.`
+    }));
+  });
+});
+
+/* ---- sub-category definitions used to build the chip bar ---- */
+const SUBCATS = {
+  academic: Array.from({length:12},(_,i)=>({ id:'class'+(i+1), label:'Class '+(i+1) })),
+  admission: ADMISSION.map(a=>({ id:a.sub, label:a.label })),
+  job: JOBS.map(j=>({ id:j.sub, label:j.label })),
 };
+
+/* ============================================================
+   GRADE / STAGE PROMOTION HELPERS
+============================================================ */
+// Ordered ladder of academic classes for promotion.
+const CLASS_LADDER = [
+  'Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7',
+  'Class 8','Class 9','Class 10','HSC 1st year','HSC 2nd year'
+];
+// map many free-text grade spellings → a ladder index (0-based)
+function gradeToLadderIndex(raw){
+  if(!raw) return -1;
+  const g = String(raw).toLowerCase().replace(/\s+/g,' ').trim();
+  // SSC ≈ Class 10 ; HSC handled below
+  if(g.includes('ssc')) return CLASS_LADDER.indexOf('Class 10');
+  if(g.includes('hsc')){
+    if(g.includes('2')||g.includes('second')) return CLASS_LADDER.indexOf('HSC 2nd year');
+    return CLASS_LADDER.indexOf('HSC 1st year');
+  }
+  const m = g.match(/(?:class|grade|std|standard)?\s*(\d{1,2})/);
+  if(m){ const n=parseInt(m[1],10); if(n>=1&&n<=12) return CLASS_LADDER.indexOf('Class '+n); }
+  return -1;
+}
+// map a ladder entry → the notes sub-category id (class1..class12)
+function ladderToSubId(entry){
+  if(!entry) return null;
+  if(entry.startsWith('Class ')) return 'class'+entry.split(' ')[1];
+  if(entry==='HSC 1st year') return 'class11';   // treat HSC as class 11/12 notes
+  if(entry==='HSC 2nd year') return 'class12';
+  return null;
+}
+
+/* Return the student's CURRENT stage, promoted to running-time year.
+   profile.details = { grade, gradeYear? }.  If gradeYear is missing we
+   assume the grade was set in the current year (no promotion yet). */
+function currentStageFor(profile){
+  const d = (profile && profile.details) || {};
+  const baseIdx = gradeToLadderIndex(d.grade);
+  if(baseIdx < 0) return null;
+  const nowYear = new Date().getFullYear();
+  const baseYear = parseInt(d.gradeYear,10) || nowYear;
+  let yearsPassed = nowYear - baseYear;
+  if(yearsPassed < 0) yearsPassed = 0;
+  let idx = baseIdx + yearsPassed;
+  if(idx > CLASS_LADDER.length-1) idx = CLASS_LADDER.length-1; // cap at HSC 2nd year
+  return {
+    entry: CLASS_LADDER[idx],
+    subId: ladderToSubId(CLASS_LADDER[idx]),
+    promoted: yearsPassed,
+    baseEntry: CLASS_LADDER[baseIdx],
+    baseYear, nowYear
+  };
+}
+// exposed so the auth module can push the signed-in profile in
+window.__notesProfile = null;
+window.setNotesProfile = function(p){ window.__notesProfile = p || null; refreshSmartUI(); if(notesMain==='mine') renderNotes(); };
+
+/* ============================================================
+   RENDERING
+============================================================ */
+/* FIX: escape any HTML in user-supplied fields (uploaded notes carry
+   arbitrary title/subject/blurb) so they can't break the markup or
+   inject script. */
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
 function noteCardHtml(n){
+  /* FIX: fall back to a known colour key so an unknown/undefined
+     `n.color` never produces `undefined` inside the class list. */
+  const color = NOTE_COLORS[n.color] ? n.color : 'brand';
+  const title = esc(n.title), subject = esc(n.subject), blurb = esc(n.blurb||'');
+  const pages = (n.pages===0||n.pages) ? esc(n.pages) : '—';
   return `<article class="note-card bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-100 dark:border-slate-700 overflow-hidden">
-    <div class="h-1.5 ${NOTE_BAR[n.color]||'gradient-brand'}"></div>
+    <div class="h-2 ${NOTE_BAR[color]}"></div>
     <div class="p-5">
       <div class="flex items-start justify-between gap-3">
-        <div class="w-12 h-12 ${NOTE_COLORS[n.color]} rounded-xl flex items-center justify-center flex-shrink-0"><i class="fas ${n.icon} text-xl"></i></div>
-        <span class="text-[10px] font-bold uppercase tracking-wide ${NOTE_COLORS[n.color]} px-2.5 py-1 rounded-full">${n.subject}</span>
+        <div class="w-12 h-12 ${NOTE_COLORS[color]} rounded-xl flex items-center justify-center flex-shrink-0 shadow-sm"><i class="fas ${esc(n.icon||'fa-file-lines')} text-xl"></i></div>
+        <span class="text-[10px] font-bold uppercase tracking-wide ${NOTE_COLORS[color]} px-2.5 py-1 rounded-full">${subject}</span>
       </div>
-      <h4 class="font-bold font-display text-slate-900 dark:text-white mt-4 leading-snug">${n.title}</h4>
-      <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed">${NOTE_BLURB[n.cat]||''}</p>
-      <p class="text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-3 flex items-center gap-1.5"><i class="far fa-file-lines"></i> ${n.pages} pages • PDF</p>
-      <button onclick="showAppToast('Downloading ${n.title}.pdf 📄')" class="mt-4 w-full py-2.5 ${NOTE_BTN[n.color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-download"></i> Download</button>
+      <h4 class="font-bold font-display text-slate-900 dark:text-white mt-4 leading-snug line-clamp-2">${title}</h4>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-3 flex-1">${blurb}</p>
+      <p class="text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-3 flex items-center gap-1.5"><i class="far fa-file-lines"></i> ${pages} pages • PDF${n.uploaded?' • <span class="text-aqua-500">uploaded</span>':''}</p>
+      ${ n.file_url
+        ? `<a href="${esc(n.file_url)}" target="_blank" rel="noopener" class="mt-4 w-full py-2.5 ${NOTE_BTN[color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-download"></i> Download</a>`
+        : `<button data-title="${title}" onclick="showAppToast('Downloading ' + this.dataset.title + '.pdf 📄')" class="mt-4 w-full py-2.5 ${NOTE_BTN[color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-download"></i> Download</button>` }
     </div>
   </article>`;
 }
-let notesCat='all', notesSearch='';
+
+let notesMain='mine';      // mine | academic | admission | job
+let notesSub='all';        // 'all' or a sub id
+let notesSearch='';
+
+/* build the sub-category chip bar for the active main category */
+function renderSubCats(){
+  const wrap=document.getElementById('notesSubCats'); if(!wrap) return;
+  if(notesMain==='mine'){ wrap.innerHTML=''; return; }
+  const list = SUBCATS[notesMain] || [];
+  const chip = (id,label,active)=>`<button data-sub="${id}" class="notes-sub px-4 py-1.5 rounded-full text-xs font-semibold transition ${active?'gradient-brand text-white shadow':'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:border-brand-300'}">${label}</button>`;
+  wrap.innerHTML = chip('all','All',notesSub==='all') + list.map(s=>chip(s.id,s.label,notesSub===s.id)).join('');
+  wrap.querySelectorAll('.notes-sub').forEach(b=>b.addEventListener('click',()=>{
+    notesSub=b.dataset.sub; renderSubCats(); renderNotes();
+  }));
+}
+
 function renderNotes(){
   const g=document.getElementById('notesGrid'); if(!g) return;
-  let list = notesData.slice();
-  if(notesCat!=='all') list=list.filter(n=>n.cat===notesCat);
-  if(notesSearch) list=list.filter(n=>(n.title+n.subject).toLowerCase().includes(notesSearch));
+  let list;
+  if(notesMain==='mine'){
+    // Personalised: show the student's CURRENT (running-time) class notes
+    const stage = currentStageFor(window.__notesProfile);
+    if(stage && stage.subId){
+      list = notesData.filter(n=>n.main==='academic' && n.sub===stage.subId);
+    } else {
+      // signed-out or non-student → gentle fallback (show class-9 sample)
+      list = notesData.filter(n=>n.main==='academic' && n.sub==='class9');
+    }
+  } else {
+    list = notesData.filter(n=>n.main===notesMain);
+    if(notesSub!=='all') list=list.filter(n=>n.sub===notesSub);
+  }
+  if(notesSearch) list=list.filter(n=>(n.title+n.subject+n.blurb).toLowerCase().includes(notesSearch));
   document.getElementById('noNotes').classList.toggle('hidden', list.length>0);
   g.innerHTML = list.map(noteCardHtml).join('');
 }
-document.getElementById('notesSearch').addEventListener('input',e=>{ notesSearch=e.target.value.toLowerCase().trim(); renderNotes(); });
-document.querySelectorAll('.notes-cat').forEach(btn=>btn.addEventListener('click',()=>{
-  document.querySelectorAll('.notes-cat').forEach(b=>{ b.classList.remove('gradient-coral','text-white','shadow-md'); b.classList.add('bg-white','dark:bg-slate-800','text-slate-600','dark:text-slate-300','border','border-slate-200','dark:border-slate-700'); });
+
+/* update the smart "For You" banner + sign-in nudge */
+function refreshSmartUI(){
+  const banner=document.getElementById('notesSmartBanner');
+  const nudge =document.getElementById('notesSignedOut');
+  const stage = currentStageFor(window.__notesProfile);
+  if(!banner||!nudge) return;
+  if(stage && stage.subId){
+    banner.classList.remove('hidden');
+    nudge.classList.add('hidden');
+    const label = SUBCATS.academic.find(s=>s.id===stage.subId);
+    const stageLabel = label ? label.label : stage.entry;
+    document.getElementById('smartTitle').textContent = `You're in ${stage.entry} for ${stage.nowYear}`;
+    const promoNote = stage.promoted>0
+      ? `Auto-moved up from ${stage.baseEntry} (${stage.baseYear}) → showing fresh ${stageLabel} notes.`
+      : `Showing notes for your current stage, refreshed for ${stage.nowYear}.`;
+    document.getElementById('smartSub').textContent = promoNote;
+  } else if(window.__notesProfile){
+    // signed in but not a student / no grade
+    banner.classList.add('hidden');
+    nudge.classList.remove('hidden');
+    nudge.querySelector('p').innerHTML = 'Add your <b>class</b> in your profile so Aimtor can show the right notes for your current stage automatically.';
+  } else {
+    banner.classList.add('hidden');
+    nudge.classList.remove('hidden');
+  }
+}
+
+/* main category tabs */
+document.querySelectorAll('.notes-main').forEach(btn=>btn.addEventListener('click',()=>{
+  document.querySelectorAll('.notes-main').forEach(b=>{ b.classList.remove('gradient-coral','text-white','shadow-md'); b.classList.add('bg-white','dark:bg-slate-800','text-slate-600','dark:text-slate-300','border','border-slate-200','dark:border-slate-700'); });
   btn.classList.add('gradient-coral','text-white','shadow-md'); btn.classList.remove('bg-white','dark:bg-slate-800','text-slate-600','dark:text-slate-300','border','border-slate-200','dark:border-slate-700');
-  notesCat=btn.dataset.cat; renderNotes();
+  notesMain=btn.dataset.main; notesSub='all';
+  renderSubCats(); renderNotes();
 }));
+
+/* "Show my notes" button jumps to the personalised tab */
+document.getElementById('smartApplyBtn')?.addEventListener('click',()=>{
+  document.querySelector('.notes-main[data-main="mine"]')?.click();
+  document.getElementById('page-notes')?.scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('notesSearch').addEventListener('input',e=>{ notesSearch=e.target.value.toLowerCase().trim(); renderNotes(); });
+
+refreshSmartUI();
+renderSubCats();
 renderNotes();
+
+/* ===== Load uploaded notes from Supabase (Notes project) ===== */
+function stageToSubId(main, stage){
+  // Map a free-text stage to the notes sub-category id used by the chip bar.
+  if(main==='academic'){
+    const idx = gradeToLadderIndex(stage);
+    if(idx>=0) return ladderToSubId(CLASS_LADDER[idx]);
+    return 'class9';
+  }
+  if(main==='admission'){
+    const s=(stage||'').toLowerCase();
+    const hit=ADMISSION.find(a=>s.includes(a.sub)||s.includes(a.label.toLowerCase().split(' ')[0]));
+    return hit?hit.sub:(ADMISSION[0]?.sub||'cadet');
+  }
+  if(main==='job') return JOBS[0]?.sub||'govt';
+  return 'all';
+}
+const NOTE_ICON_BY_SUBJECT = { math:'fa-square-root-variable', physics:'fa-atom', chemistry:'fa-flask', biology:'fa-dna', english:'fa-book', bangla:'fa-language', ict:'fa-code' };
+const NOTE_COLOR_CYCLE = ['brand','aqua','coral','plum','gold','sunset'];
+function normalizeNoteRow(r,i){
+  const subj=(r.subject||'General');
+  const key=subj.toLowerCase();
+  return {
+    main: r.main_category||'academic',
+    sub:  stageToSubId(r.main_category||'academic', r.stage),
+    title: r.title||subj,
+    subject: subj,
+    icon: NOTE_ICON_BY_SUBJECT[key] || 'fa-file-lines',
+    color: NOTE_COLOR_CYCLE[i % NOTE_COLOR_CYCLE.length],
+    blurb: r.blurb||'',
+    pages: r.pages||'—',
+    file_url: r.file_url||null,
+    uploaded: true
+  };
+}
+async function loadUploadedNotes(){
+  if(!sbNotes) return;
+  try{
+    const { data, error } = await sbNotes.from('notes').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    // strip previously-loaded uploads, then prepend fresh ones
+    for(let i=notesData.length-1;i>=0;i--){ if(notesData[i].uploaded) notesData.splice(i,1); }
+    (data||[]).map(normalizeNoteRow).reverse().forEach(n=>notesData.unshift(n));
+    renderNotes(); renderAimPreviews();
+  }catch(e){ console.warn('Notes fetch failed:', e.message); }
+}
+loadUploadedNotes();
 
 /* past papers */
 const papers = [
@@ -2080,6 +3185,564 @@ function renderRoutines(){
 function formatTime(t){ if(!t)return''; let[h,m]=t.split(':');h=parseInt(h);const ap=h>=12?'PM':'AM';h=h%12||12;return `${h}:${m} ${ap}`; }
 window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRoutines(); };
 
+/* ============================================================= */
+/* ===== EXAM POWER BOARD ====================================== */
+/* ============================================================= */
+(function(){
+  const EP_KEY='aimtor-exam-power';
+  const $=id=>document.getElementById(id);
+  const setupEl=$('epSetup'), boardEl=$('epBoard');
+  let data=null, step=1, wizardTasks=[], tickHandle=null;
+
+  const load=()=>{ try{ return JSON.parse(localStorage.getItem(EP_KEY)); }catch(e){ return null; } };
+  const save=()=>localStorage.setItem(EP_KEY, JSON.stringify(data));
+  const todayISO=()=>new Date().toISOString().slice(0,10);
+
+  /* ---------- Setup wizard ---------- */
+  function showStep(n){
+    step=n;
+    document.querySelectorAll('#epSetup .ep-step').forEach(s=>s.classList.toggle('hidden', +s.dataset.step!==n));
+    $('epProgress').style.width=(n/3*100)+'%';
+  }
+  // exam name chips
+  document.querySelectorAll('#epExamChips .ep-chip').forEach(c=>c.addEventListener('click',()=>{ $('epExamName').value=c.textContent.trim(); }));
+  // next / back
+  document.querySelectorAll('#epSetup .ep-next').forEach(b=>b.addEventListener('click',()=>{
+    if(step===1 && !$('epExamName').value.trim()){ $('epExamName').focus(); showAppToast('Please enter your exam name'); return; }
+    if(step===2 && !$('epExamDate').value){ $('epExamDate').focus(); showAppToast('Please pick your exam date'); return; }
+    showStep(step+1);
+  }));
+  document.querySelectorAll('#epSetup .ep-back').forEach(b=>b.addEventListener('click',()=>showStep(step-1)));
+
+  /* ---------- CIRCULAR CLOCK PICKER ---------- */
+  // clkHour: 1..12, clkMin: 0..59, clkAP: 'AM'|'PM', clkMode: 'hour'|'minute'
+  let clkHour=4, clkMin=0, clkAP='PM', clkMode='hour', clkDur=30;
+  const CLK_FACE=()=>$('clockFace');
+
+  function build24(){ // returns "HH:MM" 24h from clock state
+    let h=clkHour%12; if(clkAP==='PM') h+=12;
+    return String(h).padStart(2,'0')+':'+String(clkMin).padStart(2,'0');
+  }
+  function drawClockNumbers(){
+    const face=CLK_FACE(); if(!face) return;
+    // remove old numbers & ticks
+    face.querySelectorAll('.clock-num,.clock-tick').forEach(e=>e.remove());
+    const R=42; // % radius for numbers
+    const vals = clkMode==='hour' ? [12,1,2,3,4,5,6,7,8,9,10,11] : [0,5,10,15,20,25,30,35,40,45,50,55];
+    vals.forEach((v,i)=>{
+      const ang=(i/12)*2*Math.PI - Math.PI/2;
+      const x=50+R*Math.cos(ang), y=50+R*Math.sin(ang);
+      const n=document.createElement('div'); n.className='clock-num';
+      n.style.left=x+'%'; n.style.top=y+'%';
+      n.textContent = clkMode==='hour' ? v : String(v).padStart(2,'0');
+      face.appendChild(n);
+    });
+  }
+  function clockUpdateHands(){
+    // hour hand angle
+    const hAng=((clkHour%12)/12)*360;
+    const mAng=(clkMin/60)*360;
+    $('clkHandHour').style.transform=`translateX(-50%) rotate(${hAng}deg)`;
+    $('clkHandMin').style.transform=`translateX(-50%) rotate(${mAng}deg)`;
+    // knob position along the active hand
+    const face=CLK_FACE(); const rect=face.getBoundingClientRect();
+    const activeVal = clkMode==='hour' ? clkHour%12 : clkMin;
+    const activeMax = clkMode==='hour' ? 12 : 60;
+    const ang=(activeVal/activeMax)*2*Math.PI - Math.PI/2;
+    const R=42;
+    const x=50+R*Math.cos(ang), y=50+R*Math.sin(ang);
+    const knob=$('clockKnob'); knob.style.left=x+'%'; knob.style.top=y+'%';
+    knob.textContent = clkMode==='hour' ? clkHour : String(clkMin).padStart(2,'0');
+    // digital readout
+    $('clkHourBtn').textContent=String(clkHour).padStart(2,'0');
+    $('clkMinBtn').textContent=String(clkMin).padStart(2,'0');
+  }
+  function setClockMode(m){
+    clkMode=m;
+    $('clkHourBtn').classList.toggle('active',m==='hour');
+    $('clkMinBtn').classList.toggle('active',m==='minute');
+    drawClockNumbers(); clockUpdateHands();
+  }
+  function setAMPM(ap){
+    clkAP=ap;
+    $('clkAM').classList.toggle('active',ap==='AM');
+    $('clkPM').classList.toggle('active',ap==='PM');
+  }
+  // pointer → value on the clock
+  function pointToValue(clientX,clientY){
+    const face=CLK_FACE(); const r=face.getBoundingClientRect();
+    const cx=r.left+r.width/2, cy=r.top+r.height/2;
+    let ang=Math.atan2(clientY-cy, clientX-cx)+Math.PI/2;
+    if(ang<0) ang+=2*Math.PI;
+    if(clkMode==='hour'){
+      let h=Math.round(ang/(2*Math.PI)*12); if(h===0)h=12; if(h>12)h=12;
+      clkHour=h;
+    } else {
+      let m=Math.round(ang/(2*Math.PI)*60)%60;
+      clkMin=m;
+    }
+    clockUpdateHands();
+  }
+  // clock event wiring
+  function initClock(){
+    $('clkHourBtn').addEventListener('click',()=>setClockMode('hour'));
+    $('clkMinBtn').addEventListener('click',()=>setClockMode('minute'));
+    $('clkAM').addEventListener('click',()=>setAMPM('AM'));
+    $('clkPM').addEventListener('click',()=>setAMPM('PM'));
+    const face=CLK_FACE();
+    let dragging=false;
+    const down=e=>{ dragging=true; const p=e.touches?e.touches[0]:e; pointToValue(p.clientX,p.clientY); e.preventDefault(); };
+    const move=e=>{ if(!dragging)return; const p=e.touches?e.touches[0]:e; pointToValue(p.clientX,p.clientY); e.preventDefault(); };
+    const up=()=>{ if(dragging && clkMode==='hour'){ setClockMode('minute'); } dragging=false; };
+    face.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
+    face.addEventListener('touchstart',down,{passive:false}); window.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',up);
+    // duration steppers
+    document.querySelectorAll('.dur-step').forEach(b=>b.addEventListener('click',()=>{
+      clkDur=Math.max(5,Math.min(240, clkDur+parseInt(b.dataset.d)));
+      $('epTaskDur').textContent=clkDur;
+    }));
+    setAMPM('PM'); setClockMode('hour');
+  }
+
+  // add task in wizard (with duration)
+  function renderWizardTasks(){
+    const list=$('epTaskList'), empty=$('epTaskEmpty');
+    list.querySelectorAll('.ep-wt').forEach(e=>e.remove());
+    empty.style.display=wizardTasks.length?'none':'block';
+    wizardTasks.forEach((t,i)=>{
+      const row=document.createElement('div');
+      row.className='ep-wt flex items-center gap-3 bg-slate-50 dark:bg-slate-900 rounded-xl px-3 py-2.5 border border-slate-200 dark:border-slate-700';
+      row.innerHTML=`<span class="text-xs font-bold text-[#b5891f] dark:text-[#e6c14b] w-14">${formatTime(t.time)}</span>
+        <span class="flex-1 text-sm text-slate-700 dark:text-slate-200 truncate">${t.task.replace(/</g,'&lt;')}</span>
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#c9a227]/15 text-[#b5891f] dark:text-[#e6c14b] whitespace-nowrap">${t.dur||30}m</span>
+        <button data-i="${i}" class="ep-wt-del w-7 h-7 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition"><i class="fas fa-trash text-xs"></i></button>`;
+      list.appendChild(row);
+    });
+    list.querySelectorAll('.ep-wt-del').forEach(b=>b.addEventListener('click',()=>{ wizardTasks.splice(+b.dataset.i,1); renderWizardTasks(); }));
+  }
+  $('epAddTask').addEventListener('click',()=>{
+    const time=build24(), task=$('epTaskName').value.trim();
+    if(!task){ $('epTaskName').focus(); showAppToast('Enter a task name'); return; }
+    if(wizardTasks.some(t=>t.time===time)){ showAppToast('A task already starts at that time — pick another.'); return; }
+    wizardTasks.push({time,task,dur:clkDur}); wizardTasks.sort((a,b)=>a.time.localeCompare(b.time));
+    $('epTaskName').value=''; renderWizardTasks(); $('epTaskName').focus();
+    showAppToast('Task added ✓');
+  });
+  $('epTaskName').addEventListener('keydown',e=>{ if(e.key==='Enter') $('epAddTask').click(); });
+
+  $('epFinish').addEventListener('click',()=>{
+    if(wizardTasks.length<1){ showAppToast('Add at least one task to your routine'); return; }
+    // preserve existing progress when editing
+    const prev=(data&&data.tasks)?data.tasks:[];
+    data={
+      exam:$('epExamName').value.trim(),
+      date:$('epExamDate').value,
+      created:todayISO(),
+      tasks:wizardTasks.map((t,i)=>{
+        const old=prev.find(p=>p.time===t.time && p.task===t.task);
+        return { id:i+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,6), time:t.time, task:t.task, dur:t.dur||30, done:old?old.done:false, reason:old?old.reason:'', notified:false };
+      })
+    };
+    save(); enterBoard();
+    showAppToast('🔥 Your Exam Power Board is ready!');
+  });
+
+  /* ---------- Board rendering ---------- */
+  function completion(){
+    if(!data||!data.tasks.length) return 0;
+    return Math.round(data.tasks.filter(t=>t.done).length/data.tasks.length*100);
+  }
+  function daysLeft(){
+    if(!data.date) return 0;
+    const diff=new Date(data.date+'T23:59:59')-new Date();
+    return Math.max(0, Math.ceil(diff/86400000));
+  }
+
+  function renderTimer(){
+    if(!data.date){ ['epDays','epHours','epMins','epSecs'].forEach(id=>$(id).textContent='00'); return; }
+    const diff=new Date(data.date+'T23:59:59')-new Date();
+    if(diff<=0){ ['epDays','epHours','epMins','epSecs'].forEach(id=>$(id).textContent='00'); return; }
+    const d=Math.floor(diff/86400000), h=Math.floor(diff%86400000/3600000), m=Math.floor(diff%3600000/60000), s=Math.floor(diff%60000/1000);
+    $('epDays').textContent=String(d).padStart(2,'0');
+    $('epHours').textContent=String(h).padStart(2,'0');
+    $('epMins').textContent=String(m).padStart(2,'0');
+    $('epSecs').textContent=String(s).padStart(2,'0');
+  }
+
+  // Each task gets a slot until the NEXT task's time (or end-of-day for the last task).
+  // The circular timer counts down the remaining time in the current task's slot.
+  const RING_R=22, RING_C=2*Math.PI*RING_R;   // radius & circumference
+  function taskWindow(idx){
+    // returns {start, end} Date objects for task at index idx (today)
+    // end = start + task duration (each task has its OWN length),
+    // but never overlaps the next task's start.
+    const sorted=[...data.tasks].sort((a,b)=>a.time.localeCompare(b.time));
+    const t=data.tasks[idx];
+    const pos=sorted.findIndex(x=>x.id===t.id);
+    const mk=(hhmm)=>{ const [h,m]=hhmm.split(':').map(Number); const d=new Date(); d.setHours(h,m,0,0); return d; };
+    const start=mk(t.time);
+    const dur=(t.dur||30)*60000;
+    let end=new Date(start.getTime()+dur);
+    // don't overlap the next task
+    if(pos<sorted.length-1){
+      const next=mk(sorted[pos+1].time);
+      if(end>next) end=next;
+    }
+    if(end<=start){ end=new Date(start.getTime()+5*60000); } // safety min 5 min
+    return {start,end};
+  }
+
+  /* ---------- Notifications & auto-advance ---------- */
+  let notifTimer=null;
+  // When the board first loads, tasks whose time is already over must NOT
+  // pop a notification (otherwise the popup "always shows" on every load and
+  // keeps re-appearing for each past task). We silently mark them handled on
+  // the first render pass, then only alert for tasks that expire live.
+  let boardReady=false;
+  function beep(){
+    try{
+      const AC=window.AudioContext||window.webkitAudioContext; if(!AC) return;
+      const ctx=new AC();
+      [0,0.18,0.36].forEach(off=>{
+        const o=ctx.createOscillator(), g=ctx.createGain();
+        o.type='sine'; o.frequency.value=880;
+        o.connect(g); g.connect(ctx.destination);
+        const t0=ctx.currentTime+off;
+        g.gain.setValueAtTime(0.0001,t0);
+        g.gain.exponentialRampToValueAtTime(0.25,t0+0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001,t0+0.15);
+        o.start(t0); o.stop(t0+0.16);
+      });
+    }catch(e){}
+  }
+  function showTaskNotif(title, body){
+    const box=$('taskNotif');
+    $('taskNotifTitle').textContent=title;
+    $('taskNotifBody').innerHTML=body;
+    box.classList.add('show');
+    clearTimeout(notifTimer);
+    notifTimer=setTimeout(()=>box.classList.remove('show'), 8000);
+    beep();
+    if('vibrate' in navigator){ try{ navigator.vibrate([200,80,200]); }catch(e){} }
+    // system notification if permitted
+    if('Notification' in window && Notification.permission==='granted'){
+      try{ new Notification(title,{body:body.replace(/<[^>]+>/g,''),icon:''}); }catch(e){}
+    }
+  }
+  function handleTaskOver(idx, finishedTask){
+    // find the next task by time that is not done
+    const sorted=[...data.tasks].sort((a,b)=>a.time.localeCompare(b.time));
+    const pos=sorted.findIndex(x=>x.id===finishedTask.id);
+    const next=sorted.slice(pos+1).find(x=>!x.done);
+    if(next){
+      showTaskNotif('⏰ Time over: '+finishedTask.task,
+        'Next task now: <b class="text-[#e6c14b]">'+next.task.replace(/</g,'&lt;')+'</b> ('+formatTime(next.time)+' • '+(next.dur||30)+' min)');
+    } else {
+      showTaskNotif('⏰ Time over: '+finishedTask.task,
+        finishedTask.done? 'All tasks handled — great discipline!' : 'That was your last task for today. Tick what you completed.');
+    }
+    // reflect in board panels
+    renderBoard();
+  }
+
+  function renderRoutineTable(){
+    const body=$('epRoutineBody');
+    body.innerHTML=data.tasks.map((t,idx)=>`
+      <tr data-id="${t.id}" data-idx="${idx}">
+        <td class="whitespace-nowrap font-semibold">${formatTime(t.time)}</td>
+        <td>${t.task.replace(/</g,'&lt;')}</td>
+        <td class="text-center whitespace-nowrap"><span class="text-xs font-bold text-[#e6c14b]">${t.dur||30}m</span></td>
+        <td class="text-center ep-ring-cell" data-idx="${idx}"></td>
+        <td class="text-center"><span class="ep-check ${t.done?'on':''}" data-act="toggle"><i class="fas fa-check text-xs"></i></span></td>
+        <td><input type="text" data-act="reason" value="${(t.reason||'').replace(/"/g,'&quot;')}" placeholder="${t.done?'—':'why not done?'}" ${t.done?'disabled':''}></td>
+        <td class="text-center"><button data-act="del" class="w-7 h-7 rounded-lg text-white/50 hover:text-rose-300 hover:bg-rose-500/20 transition"><i class="fas fa-trash text-xs"></i></button></td>
+      </tr>`).join('');
+    body.querySelectorAll('.ep-check').forEach(c=>c.addEventListener('click',()=>{
+      const id=c.closest('tr').dataset.id, t=data.tasks.find(x=>x.id===id);
+      t.done=!t.done; if(t.done) t.reason='';
+      save(); renderBoard();
+    }));
+    body.querySelectorAll('input[data-act="reason"]').forEach(inp=>inp.addEventListener('input',()=>{
+      const id=inp.closest('tr').dataset.id, t=data.tasks.find(x=>x.id===id);
+      t.reason=inp.value; save(); analyze();
+    }));
+    body.querySelectorAll('button[data-act="del"]').forEach(b=>b.addEventListener('click',()=>{
+      const id=b.closest('tr').dataset.id, t=data.tasks.find(x=>x.id===id);
+      if(!confirm('Delete this task from your routine?\n\n"'+(t?t.task:'')+'"')) return;
+      data.tasks=data.tasks.filter(x=>x.id!==id);
+      save(); renderBoard(); showAppToast('Task deleted');
+    }));
+    const done=data.tasks.filter(t=>t.done).length;
+    $('epRoutineStat').textContent=`${done} / ${data.tasks.length} done`;
+    // build the circular timers, then start ticking them
+    buildRings(); renderRings();
+  }
+
+  // create the ring SVG markup once per row
+  function buildRings(){
+    document.querySelectorAll('#epRoutineBody .ep-ring-cell').forEach(cell=>{
+      cell.innerHTML=`
+        <div class="ep-ring-wrap inline-flex align-middle">
+          <svg class="ep-ring" viewBox="0 0 52 52">
+            <circle class="ep-ring-track" cx="26" cy="26" r="${RING_R}"></circle>
+            <circle class="ep-ring-prog" cx="26" cy="26" r="${RING_R}"
+              stroke-dasharray="${RING_C.toFixed(1)}" stroke-dashoffset="0"></circle>
+          </svg>
+          <div class="ep-ring-label"><span class="ep-ring-time">--</span><span class="ep-ring-unit"></span></div>
+        </div>`;
+    });
+  }
+
+  // update every ring's remaining time; called each second
+  function renderRings(){
+    const now=new Date();
+    document.querySelectorAll('#epRoutineBody tr').forEach(tr=>{
+      const idx=+tr.dataset.idx;
+      const id=tr.dataset.id, t=data.tasks.find(x=>x.id===id);
+      const cell=tr.querySelector('.ep-ring-cell'); if(!cell) return;
+      const wrap=cell.querySelector('.ep-ring-wrap');
+      const prog=cell.querySelector('.ep-ring-prog');
+      const timeEl=cell.querySelector('.ep-ring-time');
+      const unitEl=cell.querySelector('.ep-ring-unit');
+      if(!wrap) return;
+
+      // if the task is already ticked done, show a completed state (no "over")
+      if(t.done){
+        wrap.classList.remove('over','soon'); wrap.classList.add('done');
+        cell.innerHTML=`<span class="inline-flex items-center gap-1 text-emerald-600 text-xs font-bold"><i class="fas fa-circle-check"></i> Done</span>`;
+        return;
+      }
+
+      const {start,end}=taskWindow(idx);
+      const total=end-start;
+      let remain=end-now;
+
+      if(now<start){
+        // upcoming — show waiting state with time until it starts
+        const untilStart=start-now;
+        wrap.classList.remove('over','soon');
+        prog.style.strokeDashoffset=RING_C; // empty ring
+        prog.style.stroke='rgba(11,30,59,.28)';
+        const mm=Math.floor(untilStart/60000);
+        timeEl.textContent = mm>=60 ? Math.floor(mm/60)+'h' : mm+'m';
+        unitEl.textContent='starts in';
+        return;
+      }
+
+      if(remain<=0){
+        // time is over → replace ring cell with a clear "Task Time Over" badge
+        cell.innerHTML=`<span class="ep-over-badge"><i class="fas fa-hourglass-end"></i> Task Time Over</span>`;
+        // fire a one-time notification & advance to the next task
+        if(!t.notified){
+          t.notified=true; save();
+          // Only pop the alert for tasks that expire while the user is actively
+          // watching the board. Tasks already over when the board first loads are
+          // marked handled SILENTLY, so the notification no longer keeps showing
+          // on every page load / page switch.
+          if(boardReady){ handleTaskOver(idx, t); }
+        }
+        return;
+      }
+
+      // running: draw the progress ring (fills DOWN as time passes)
+      const frac=Math.max(0,Math.min(1,remain/total));
+      prog.style.stroke=''; // use gradient
+      prog.style.strokeDashoffset=(RING_C*(1-frac)).toFixed(1);
+      wrap.classList.toggle('soon', remain<=5*60*1000); // < 5 min → amber warning
+
+      // format remaining time compactly
+      const h=Math.floor(remain/3600000), m=Math.floor(remain%3600000/60000), s=Math.floor(remain%60000/1000);
+      if(h>0){ timeEl.textContent=h+':'+String(m).padStart(2,'0'); unitEl.textContent='hr:min'; }
+      else if(m>0){ timeEl.textContent=m+':'+String(s).padStart(2,'0'); unitEl.textContent='min:sec'; }
+      else { timeEl.textContent=s; unitEl.textContent='sec'; }
+    });
+  }
+
+  // Which month the calendar is currently showing (defaults to the exam month
+  // so the exam date is always visible; user can navigate with ◀ ▶).
+  let calView=null;
+  function localISO(dt){ // timezone-safe YYYY-MM-DD
+    return dt.getFullYear()+'-'+String(dt.getMonth()+1).padStart(2,'0')+'-'+String(dt.getDate()).padStart(2,'0');
+  }
+  function renderCalendar(){
+    const cal=$('epCalendar');
+    const now=new Date();
+    const examD=data.date?new Date(data.date+'T00:00:00'):null;
+    // Default view = exam month (so the exam day shows up), else current month.
+    if(!calView){
+      const base = examD || now;
+      calView={ y:base.getFullYear(), mo:base.getMonth() };
+    }
+    const y=calView.y, mo=calView.mo;
+    const first=new Date(y,mo,1).getDay(), total=new Date(y,mo+1,0).getDate();
+    const monthName=new Date(y,mo,1).toLocaleDateString(undefined,{month:'long',year:'numeric'});
+    const labels=['S','M','T','W','T','F','S'];
+    const todayStr=localISO(now);
+    const pct=completion();
+
+    // header: month label + prev/next nav
+    let head=`<div class="col-span-7 flex items-center justify-between mb-1">
+        <button type="button" id="epCalPrev" class="w-7 h-7 rounded-lg bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition"><i class="fas fa-chevron-left text-[11px]"></i></button>
+        <span class="text-xs font-bold text-white/90 tracking-wide">${monthName}</span>
+        <button type="button" id="epCalNext" class="w-7 h-7 rounded-lg bg-white/15 hover:bg-white/30 text-white flex items-center justify-center transition"><i class="fas fa-chevron-right text-[11px]"></i></button>
+      </div>`;
+    let html=head + labels.map(l=>`<div class="text-white/50 font-bold">${l}</div>`).join('');
+    for(let i=0;i<first;i++) html+='<div></div>';
+    for(let d=1;d<=total;d++){
+      const cur=new Date(y,mo,d), iso=localISO(cur);
+      let cls='ep-cal-cell', badge='', title='';
+      const isToday=iso===todayStr;
+      const isExam=examD && cur.toDateString()===examD.toDateString();
+      if(isExam){ cls+=' !bg-sunset-500 !text-white ring-2 ring-sunset-300'; title=' title="Exam day"'; }
+      else if(isToday){ // today reflects completion
+        if(pct>=70) cls+=' !bg-aqua-500 !text-white';
+        else if(pct>0 && data.tasks.some(t=>!t.done)) cls+=' !bg-rose-400 !text-white';
+      }
+      if(isToday) badge=' ring-2 ring-brand-300';
+      html+=`<div class="${cls}${badge}"${title}>${d}${isExam?'<i class="fas fa-star text-[7px] absolute mt-4 opacity-80"></i>':''}</div>`;
+    }
+    cal.innerHTML=html;
+
+    // wire navigation
+    const go=delta=>{ let m=mo+delta,yy=y; if(m<0){m=11;yy--;} if(m>11){m=0;yy++;} calView={y:yy,mo:m}; renderCalendar(); };
+    const prev=$('epCalPrev'), next=$('epCalNext');
+    if(prev) prev.onclick=()=>go(-1);
+    if(next) next.onclick=()=>go(1);
+  }
+
+  function renderPerformance(){
+    // build a rolling snapshot per weekday based on completion history
+    const wrap=$('epPerformance');
+    const pct=completion();
+    // store daily snapshot
+    data.history=data.history||{};
+    data.history[todayISO()]=pct; save();
+    // last up-to 6 recorded days
+    const entries=Object.entries(data.history).sort((a,b)=>a[0].localeCompare(b[0])).slice(-6);
+    const dayName=iso=>['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][new Date(iso+'T00:00:00').getDay()];
+    const color=p=>p>=80?'linear-gradient(135deg,#10b7a6,#0891b2)':p>=50?'linear-gradient(135deg,#6d57f5,#8b5cf6)':p>=25?'linear-gradient(135deg,#f59e0b,#f97316)':'linear-gradient(135deg,#fb7185,#e11d48)';
+    wrap.innerHTML=entries.map(([iso,p])=>`<div class="ep-perf-cell" style="background:${color(p)}">${p}%<small>${dayName(iso)}</small></div>`).join('')
+      || '<p class="col-span-3 text-xs text-amber-900/60 dark:text-amber-200/50 text-center py-3">Tick your tasks to build performance data.</p>';
+    $('epOverall').textContent=pct+'%';
+  }
+
+  function analyze(){
+    const pct=completion();
+    const undone=data.tasks.filter(t=>!t.done);
+    const reasons=undone.map(t=>t.reason.toLowerCase()).filter(Boolean);
+    const daysToExam=daysLeft();
+
+    /* --- Suggestions --- */
+    const sug=[];
+    if(pct>=80) sug.push('You are on fire — keep this pace!');
+    else if(pct>=50) sug.push("Good progress, but don't waste your time.");
+    else sug.push("Don't waste your time — start now.");
+    sug.push('Be careful & review what you missed.');
+    if(daysToExam<=7 && daysToExam>0) sug.push(`Only ${daysToExam} day${daysToExam>1?'s':''} left — revise daily!`);
+    else if(undone.length) sug.push(`Finish your ${undone.length} pending task${undone.length>1?'s':''} today.`);
+    $('epSuggestions').innerHTML=sug.map(s=>`<li><i class="fas fa-star text-gold-500 text-[10px] mr-1"></i>${s}</li>`).join('');
+
+    /* --- Mistakes (from reasons + behaviour) --- */
+    const mistakes=[];
+    if(reasons.some(r=>/mobile|phone|social|insta|fb|game|youtube|scroll/.test(r))) mistakes.push('You are giving more time to mobile.');
+    if(reasons.some(r=>/lazy|sleep|tired|mood|later|bore/.test(r))) mistakes.push('You are being lazy / procrastinating.');
+    if(reasons.some(r=>/time|late|busy|forgot|no time/.test(r))) mistakes.push('Poor time management.');
+    if(pct<50 && data.tasks.length) mistakes.push('Low routine completion — inconsistent effort.');
+    if(!mistakes.length) mistakes.push(pct>=80?'No major mistakes — stay disciplined!':'Add reasons for skipped tasks to find your leaks.');
+    $('epMistakes').innerHTML=mistakes.map(m=>`<li>${m}</li>`).join('');
+
+    /* --- SWOT --- */
+    const doneCount=data.tasks.filter(t=>t.done).length;
+    $('epStrength').textContent = pct>=70 ? `Strong discipline — ${doneCount}/${data.tasks.length} tasks done.` :
+                                  pct>=40 ? 'You show up & try consistently.' : 'You have a clear routine planned.';
+    $('epWeakness').textContent = mistakes[0]!=='No major mistakes — stay disciplined!' ? mistakes[0] : 'Minor — keep momentum.';
+    $('epOpportunity').textContent = daysToExam>0 ? `${daysToExam} days to boost your score with focused study.` : 'Use every session to master weak topics.';
+    $('epThreats').textContent = pct<50 ? 'Distractions & low completion may hurt results.' :
+                                 daysToExam<=5 && daysToExam>0 ? 'Limited time — avoid last-minute cramming.' : 'Overconfidence — keep revising.';
+  }
+
+  function renderBoard(){
+    $('epBoardExam').textContent=data.exam||'My Exam';
+    calView=null; // re-center calendar on the exam month each time the board opens
+    renderTimer(); renderRoutineTable(); renderCalendar(); renderPerformance(); analyze();
+  }
+
+  function enterBoard(){
+    setupEl.classList.add('hidden'); boardEl.classList.remove('hidden');
+    // ask once for notification permission so time-over alerts can pop
+    if('Notification' in window && Notification.permission==='default'){
+      try{ Notification.requestPermission(); }catch(e){}
+    }
+    // First render pass: silently absorb any tasks already past-due so we do
+    // NOT flash the "Task time over" popup on load / page switch.
+    boardReady=false;
+    // Pre-mark every task whose slot has ALREADY ended as "notified" so the
+    // ring render never triggers a popup for them. Only tasks that expire LIVE
+    // (while the user is on the board) will alert.
+    try{
+      const nowT=new Date();
+      (data.tasks||[]).forEach((t,idx)=>{
+        if(t.done){ return; }
+        const w=taskWindow(idx);
+        if(w.end<=nowT){ t.notified=true; }
+      });
+      save();
+    }catch(e){}
+    // make sure any stale popup from a previous view is hidden
+    const _nb=$('taskNotif'); if(_nb) _nb.classList.remove('show'); clearTimeout(notifTimer);
+    renderBoard();
+    // give the render pass a tick, then enable live notifications
+    setTimeout(()=>{ boardReady=true; }, 1500);
+    clearInterval(tickHandle);
+    tickHandle=setInterval(()=>{ renderTimer(); renderRings(); },1000);
+  }
+  function enterSetup(prefill){
+    boardEl.classList.add('hidden'); setupEl.classList.remove('hidden');
+    clearInterval(tickHandle);
+    if(prefill && data){
+      $('epExamName').value=data.exam||''; $('epExamDate').value=data.date||'';
+      wizardTasks=data.tasks.map(t=>({time:t.time,task:t.task,dur:t.dur||30}));
+    } else { wizardTasks=[]; $('epExamName').value=''; $('epExamDate').value=''; }
+    // Show a "Back to Board" button whenever an existing board can be returned to
+    const canReturn = !!(data && Array.isArray(data.tasks) && data.tasks.length);
+    const b2b=$('epBackToBoard');
+    if(b2b) b2b.classList.toggle('hidden', !canReturn);
+    renderWizardTasks(); showStep(1);
+  }
+
+  // Back button on the FIRST step (or the dedicated button) returns to the board
+  $('epBackToBoard').addEventListener('click',()=>{
+    if(data && Array.isArray(data.tasks) && data.tasks.length){
+      enterBoard();
+      document.getElementById('examPower').scrollIntoView({behavior:'smooth',block:'start'});
+    }
+  });
+
+  $('epEdit').addEventListener('click',()=>enterSetup(true));
+  $('epAddMore').addEventListener('click',()=>{ enterSetup(true); showStep(3); document.getElementById('epSetup').scrollIntoView({behavior:'smooth',block:'center'}); });
+  $('epReset').addEventListener('click',()=>{
+    if(!confirm('Reset your Exam Power Board? This clears your exam, routine & progress.')) return;
+    localStorage.removeItem(EP_KEY); data=null; wizardTasks=[]; enterSetup(false);
+    showAppToast('Board reset.');
+  });
+
+  /* ---------- init ---------- */
+  initClock();
+  data=load();
+  if(data && data.tasks && data.tasks.length){
+    // reset daily "done" ticks + notifications if a new day started
+    if(data.created!==todayISO()){
+      data.tasks.forEach(t=>{ t.done=false; t.reason=''; t.notified=false; });
+      data.created=todayISO(); save();
+    }
+    // backfill duration for older saved data
+    data.tasks.forEach(t=>{ if(t.dur==null) t.dur=30; });
+    enterBoard();
+  } else {
+    renderWizardTasks(); showStep(1);
+  }
+})();
+
 /* ===== Pomodoro timer ===== */
 let timeLeft=25*60, timerInt=null, running=false, isBreak=false;
 const timerDisplay=document.getElementById('timerDisplay'), timerRing=document.getElementById('timerRing'), timerLabel=document.getElementById('timerLabel'), startBtn=document.getElementById('timerStart');
@@ -2259,8 +3922,11 @@ function renderModal(b){
         <div class="h-2 bg-slate-100 dark:bg-slate-700 rounded-full overflow-hidden"><div id="progBar" class="h-full gradient-plum-gold w-0 transition-all duration-700"></div></div>
       </div>
       <div class="flex flex-col sm:flex-row gap-3 mt-6">
-        <button onclick="startReading(${b.id})" class="flex-1 py-3 gradient-plum text-white font-semibold rounded-xl hover:scale-[1.02] transition"><i class="fas fa-book-open-reader mr-1"></i> Read Online</button>
-        <button onclick="showToast('Borrowed! Available offline for 14 days 📚')" class="flex-1 py-3 bg-gold-400 text-plum-900 font-semibold rounded-xl hover:scale-[1.02] transition"><i class="fas fa-download mr-1"></i> Borrow</button>
+        ${ b.file_url
+          ? `<a href="${b.file_url}" target="_blank" rel="noopener" class="flex-1 py-3 gradient-plum text-white font-semibold rounded-xl hover:scale-[1.02] transition text-center"><i class="fas fa-book-open-reader mr-1"></i> Read Online</a>
+             <a href="${b.file_url}" download target="_blank" rel="noopener" class="flex-1 py-3 bg-gold-400 text-plum-900 font-semibold rounded-xl hover:scale-[1.02] transition text-center"><i class="fas fa-download mr-1"></i> Download</a>`
+          : `<button onclick="startReading(${b.id})" class="flex-1 py-3 gradient-plum text-white font-semibold rounded-xl hover:scale-[1.02] transition"><i class="fas fa-book-open-reader mr-1"></i> Read Online</button>
+             <button onclick="showToast('Borrowed! Available offline for 14 days 📚')" class="flex-1 py-3 bg-gold-400 text-plum-900 font-semibold rounded-xl hover:scale-[1.02] transition"><i class="fas fa-download mr-1"></i> Borrow</button>` }
         <button onclick="toggleShelf(${b.id})" class="px-4 py-3 rounded-xl font-semibold border-2 ${saved?'border-gold-400 text-gold-600 dark:text-gold-400':'border-plum-200 dark:border-slate-600 text-plum-600 dark:text-plum-300'} hover:bg-plum-50 dark:hover:bg-slate-700 transition"><i class="fa-bookmark ${saved?'fas':'far'}"></i></button>
       </div>
     </div>`;
@@ -2298,6 +3964,46 @@ function setView(v){
 document.getElementById('gridViewBtn').addEventListener('click',()=>setView('grid'));
 document.getElementById('listViewBtn').addEventListener('click',()=>setView('list'));
 saveShelf(); renderLibrary();
+
+/* ===== Load uploaded books from Supabase (Library project) ===== */
+const BOOK_CAT_META = {
+  science:    { name:'Science',    color:'from-emerald-500 to-teal-600',   icon:'fa-flask' },
+  math:       { name:'Math',       color:'from-blue-500 to-cyan-600',      icon:'fa-square-root-variable' },
+  literature: { name:'Literature', color:'from-rose-500 to-plum-600',      icon:'fa-feather' },
+  history:    { name:'History',    color:'from-amber-500 to-orange-600',   icon:'fa-landmark' },
+  tech:       { name:'Technology', color:'from-sky-500 to-blue-600',       icon:'fa-code' },
+};
+function normalizeBookRow(r){
+  const cat=r.category||'science';
+  const m=BOOK_CAT_META[cat]||BOOK_CAT_META.science;
+  return {
+    id: 100000 + (r.id||Math.floor(Math.random()*90000)),  // keep uploaded IDs distinct from seed (1..12)
+    title: r.title||'Untitled',
+    author: r.author||'Unknown',
+    cat, catName: m.catName||m.name,
+    rating: r.rating || 4.5,
+    pages: r.pages || '—',
+    year: r.year || new Date().getFullYear(),
+    reads: r.reads ? String(r.reads) : 'New',
+    popular: false, new: true,
+    color: m.color, icon: m.icon,
+    desc: r.description || 'A newly uploaded book in the Aimtor Library.',
+    file_url: r.file_url || null,
+    uploaded: true
+  };
+}
+async function loadUploadedBooks(){
+  if(!sbLib) return;
+  try{
+    const { data, error } = await sbLib.from('books').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    // remove previously-loaded uploads, then prepend fresh ones
+    for(let i=books.length-1;i>=0;i--){ if(books[i].uploaded) books.splice(i,1); }
+    (data||[]).map(normalizeBookRow).reverse().forEach(b=>books.unshift(b));
+    renderLibrary(); renderAimPreviews();
+  }catch(e){ console.warn('Books fetch failed:', e.message); }
+}
+loadUploadedBooks();
 
 /* library counters */
 let libCounted=false;
@@ -2542,6 +4248,20 @@ window.addEventListener('hashchange',()=>{ const h=(location.hash||'').replace('
     grp.querySelectorAll('[data-field]').forEach(inp=>{ const v=(inp.value||'').trim(); if(v) details[inp.dataset.field]=v; });
     if(role==='teacher' && selectedSkill) details.skill = selectedSkill;
 
+    // ---- SMART NOTES: stamp the year the class was set (for auto-promotion) ----
+    // Only (re)stamp when the student's grade actually changes, so a student
+    // who set "Class 9" in 2026 keeps baseYear=2026 and auto-moves to Class 10
+    // in 2027 — even if they open "Edit profile" later without changing class.
+    if(role==='student' && details.grade){
+      const prevGrade = currentProfile?.details?.grade;
+      const prevYear  = currentProfile?.details?.gradeYear;
+      if(prevGrade === details.grade && prevYear){
+        details.gradeYear = prevYear;           // keep original enrolment year
+      } else {
+        details.gradeYear = String(new Date().getFullYear()); // new/changed class → stamp now
+      }
+    }
+
     // validation
     let missing = [];
     if(role==='student'){ if(!details.institution) missing.push('Institution name'); if(!details.grade) missing.push('Class / grade'); }
@@ -2617,6 +4337,8 @@ window.addEventListener('hashchange',()=>{ const h=(location.hash||'').replace('
     else { el.textContent = initials(displayName()); }
   }
   function reflectAuthState(){
+    // keep the smart Notes engine in sync with the signed-in profile
+    if(window.setNotesProfile) window.setNotesProfile(currentUser ? currentProfile : null);
     if(currentUser){
       signInBtn.classList.add('hidden');
       accountBtn.classList.remove('hidden'); accountBtn.classList.add('flex');
@@ -2641,7 +4363,18 @@ window.addEventListener('hashchange',()=>{ const h=(location.hash||'').replace('
     const role = currentProfile?.role;
     if(!role){ box.innerHTML=''; return; }
     const rows=[];
-    if(role==='student'){ if(d.institution) rows.push(['fa-building-columns',d.institution]); if(d.grade) rows.push(['fa-layer-group',d.grade]); if(d.subrole) rows.push(['fa-id-badge',d.subrole]); }
+    if(role==='student'){
+      if(d.institution) rows.push(['fa-building-columns',d.institution]);
+      if(d.grade){
+        rows.push(['fa-layer-group', d.grade]);
+        // show the auto-promoted CURRENT stage if it differs from the saved grade
+        try{
+          const st = (typeof currentStageFor==='function') ? currentStageFor(currentProfile) : null;
+          if(st && st.promoted>0){ rows.push(['fa-arrow-trend-up', `Now: ${st.entry} (${st.nowYear})`]); }
+        }catch(e){}
+      }
+      if(d.subrole) rows.push(['fa-id-badge',d.subrole]);
+    }
     if(role==='teacher'){ if(d.institution) rows.push(['fa-building-columns',d.institution]); if(d.subject) rows.push(['fa-book',d.subject]); if(d.skill) rows.push(['fa-star',d.skill]); if(d.experience) rows.push(['fa-clock',d.experience]); }
     if(role==='other'){ if(d.subrole) rows.push(['fa-user-tag',d.subrole]); if(d.institution) rows.push(['fa-building',d.institution]); if(d.goal) rows.push(['fa-bullseye',d.goal]); }
     box.innerHTML = rows.map(r=>`<p class="flex items-center gap-2"><i class="fas ${r[0]} w-3.5 text-brand-400"></i> ${r[1]}</p>`).join('') || '';
@@ -2716,6 +4449,12 @@ document.querySelectorAll('button').forEach(b=>{
   }
 });
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
