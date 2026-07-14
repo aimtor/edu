@@ -420,8 +420,8 @@ tailwind.config = {
     transition:stroke-dashoffset 1s linear, stroke .4s}
   .ep-ring-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
     font-family:'Sora',sans-serif;line-height:1;pointer-events:none}
-  .ep-ring-time{font-size:.82rem;font-weight:900;color:#0b1e3b;letter-spacing:-.2px}
-  .ep-ring-unit{font-size:.46rem;font-weight:700;margin-top:2px;opacity:.75;text-transform:uppercase;letter-spacing:.6px;color:#8a6d10}
+  .ep-ring-time{font-size:.82rem;font-weight:900;color:#e2e8f0;letter-spacing:-.2px}
+  .ep-ring-unit{font-size:.46rem;font-weight:700;margin-top:2px;opacity:.75;text-transform:uppercase;letter-spacing:.6px;color:#a3a4ff}
   /* running (plenty of time) → cool teal/green glow */
   .ep-ring-wrap .ep-ring-prog{stroke:url(#epRingGrad)}
   /* < 5 min left → amber warning + pulsing wrap */
@@ -439,77 +439,112 @@ tailwind.config = {
   @keyframes epBlink{0%,100%{opacity:1}50%{opacity:.35}}
   @keyframes epRingPulse{0%,100%{filter:drop-shadow(0 4px 8px rgba(245,158,11,.35))}50%{filter:drop-shadow(0 4px 14px rgba(245,158,11,.7))}}
 
+  /* ===== Simple routine status pills (replaces the circular clock) ===== */
+  .ep-stat{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;
+    font-family:'Sora',sans-serif;font-size:.68rem;font-weight:800;white-space:nowrap;letter-spacing:.2px}
+  .ep-stat i{font-size:.66rem}
+  .ep-stat-done{background:linear-gradient(135deg,#34d399,#10b7a6);color:#fff;box-shadow:0 4px 12px -3px rgba(16,183,166,.6)}
+  .ep-stat-wait{background:rgba(148,163,184,.18);color:#64748b;border:1px solid rgba(148,163,184,.35)}
+  .ep-stat-run{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff;box-shadow:0 4px 12px -3px rgba(99,102,241,.55)}
+  .ep-stat-soon{background:linear-gradient(135deg,#f59e0b,#f97316);color:#fff;box-shadow:0 4px 12px -3px rgba(245,158,11,.6);animation:epPulse 1.4s ease-in-out infinite}
+  .ep-stat-over{background:linear-gradient(135deg,#fb7185,#e11d48);color:#fff;box-shadow:0 4px 14px -3px rgba(225,29,72,.6);animation:epPulse 1.6s ease-in-out infinite}
+
   /* =====================================================================
      ===== STRICT EXAM-BOARD THEME (formal / serious examination look) ===
      ===================================================================== */
   :root{
-    --exb-navy:#0b1e3b;      /* deep official navy */
-    --exb-navy2:#10294f;
-    --exb-ink:#0a1729;
-    --exb-gold:#c9a227;      /* official gold seal */
-    --exb-gold2:#e6c14b;
-    --exb-crimson:#8b1e2d;   /* examination red */
-    --exb-paper:#f7f3e8;     /* aged paper */
-    --exb-line:rgba(201,162,39,.35);
+    /* "Plan & focus like a pro" palette — deep slate + brand purple + teal */
+    --exb-navy:#0f172a;      /* deep slate base */
+    --exb-navy2:#131a33;
+    --exb-ink:#0b1220;
+    --exb-gold:#6d57f5;      /* brand purple accent (was gold) */
+    --exb-gold2:#857dff;     /* lighter brand purple */
+    --exb-crimson:#fb3d72;   /* rose accent */
+    --exb-paper:#0f172a;
+    --exb-line:rgba(133,125,255,.35);
   }
-  /* The board container — a formal examination notice board (WHITE background) */
+  /* =====================================================================
+     THE BOARD CONTAINER — "Study tool · Plan & focus like a pro" theme
+     Deep slate base + purple→teal aurora glow + frosted glass panels.
+     Matches the Study Tools ("Plan & focus like a pro") section exactly.
+     ===================================================================== */
   .ep-door.exam-board{
     background:
-      repeating-linear-gradient(0deg, rgba(11,30,59,.015) 0 2px, transparent 2px 4px),
-      radial-gradient(120% 120% at 100% 0%, rgba(201,162,39,.12), transparent 55%),
-      #ffffff;
-    border:2px solid var(--exb-gold);
-    box-shadow:0 30px 70px -24px rgba(11,30,59,.25), inset 0 0 0 4px rgba(201,162,39,.10), inset 0 1px 0 rgba(255,255,255,.8);
+      radial-gradient(90% 90% at 12% -10%, rgba(109,87,245,.35), transparent 55%),
+      radial-gradient(80% 90% at 100% 0%, rgba(19,189,182,.28), transparent 55%),
+      radial-gradient(90% 100% at 50% 120%, rgba(109,87,245,.22), transparent 55%),
+      linear-gradient(165deg,#0f172a 0%,#131a33 55%,#020617 100%);
+    border:1px solid rgba(255,255,255,.10);
+    box-shadow:0 30px 70px -24px rgba(2,6,23,.75), inset 0 1px 0 rgba(255,255,255,.08);
     border-radius:1.25rem;
-    color:#0b1e3b;
+    color:#e2e8f0;
+    position:relative;overflow:hidden;
   }
-  .ep-door.exam-board::before{opacity:.12}
-  /* keep white background even in dark mode as requested */
+  /* soft blurred glow orbs like the "focus like a pro" section */
+  .ep-door.exam-board::before{
+    content:"";position:absolute;top:-60px;right:-40px;width:22rem;height:22rem;border-radius:50%;
+    background:rgba(109,87,245,.20);filter:blur(70px);pointer-events:none;opacity:1;z-index:0;
+  }
+  .ep-door.exam-board::after{
+    content:"";position:absolute;bottom:-60px;left:-40px;width:20rem;height:20rem;border-radius:50%;
+    background:rgba(19,189,182,.18);filter:blur(70px);pointer-events:none;z-index:0;
+  }
   .dark .ep-door.exam-board{
     background:
-      repeating-linear-gradient(0deg, rgba(11,30,59,.02) 0 2px, transparent 2px 4px),
-      radial-gradient(120% 120% at 100% 0%, rgba(201,162,39,.14), transparent 55%),
-      #ffffff;
-    border-color:var(--exb-gold);
-    color:#0b1e3b;
+      radial-gradient(90% 90% at 12% -10%, rgba(109,87,245,.30), transparent 55%),
+      radial-gradient(80% 90% at 100% 0%, rgba(19,189,182,.24), transparent 55%),
+      radial-gradient(90% 100% at 50% 120%, rgba(109,87,245,.20), transparent 55%),
+      linear-gradient(165deg,#0b1220 0%,#0f172a 55%,#020617 100%);
+    border-color:rgba(255,255,255,.08);
+    color:#e2e8f0;
   }
-  /* Official gold corner seal on the board */
+  /* keep board content above the glow orbs */
+  .ep-door.exam-board > *{position:relative;z-index:1}
+  /* Corner badge — brand→teal glass chip */
   .exam-board-seal{
     position:absolute;top:14px;right:16px;width:60px;height:60px;border-radius:50%;
-    border:2px dashed rgba(255,255,255,.55);display:flex;align-items:center;justify-content:center;
-    color:#fff;font-size:1.35rem;background:rgba(255,255,255,.14);
-    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
-    box-shadow:inset 0 0 12px rgba(255,255,255,.25);z-index:5;
+    border:1px solid rgba(255,255,255,.20);display:flex;align-items:center;justify-content:center;
+    color:#fff;font-size:1.35rem;
+    background:linear-gradient(135deg,rgba(109,87,245,.55),rgba(19,189,182,.45));
+    -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    box-shadow:0 8px 24px -8px rgba(109,87,245,.6), inset 0 1px 0 rgba(255,255,255,.25);z-index:5;
   }
   @media (max-width:640px){ .exam-board-seal{width:46px;height:46px;font-size:1rem;top:10px;right:10px} }
-  /* Panels look like framed official notices (on white board) */
+  /* Panels = frosted "glass-dark" cards (identical to focus-like-a-pro cards) */
   .exam-board .ep-panel{
-    background:#fbf9f2;
-    border:1px solid rgba(201,162,39,.45);
-    border-radius:12px;
-    box-shadow:0 10px 24px -16px rgba(11,30,59,.35), inset 0 1px 0 rgba(255,255,255,.9);
-    color:#1e293b;
+    background:rgba(255,255,255,.06);
+    -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+    border:1px solid rgba(255,255,255,.10);
+    border-radius:16px;
+    box-shadow:0 10px 30px -18px rgba(2,6,23,.8), inset 0 1px 0 rgba(255,255,255,.06);
+    color:#e2e8f0;
   }
-  .exam-board .ep-panel:hover{transform:translateY(-2px)}
-  .exam-board .ep-title{color:#8a6d10;text-transform:uppercase;letter-spacing:1px;font-size:.95rem}
-  /* headings & body text inside the white board default to dark ink */
-  .exam-board h1,.exam-board h2,.exam-board h3,.exam-board h4,.exam-board h5,
-  .exam-board p,.exam-board span,.exam-board li,.exam-board label,.exam-board td{color:#1e293b}
-  .exam-board [class*="text-white"]{color:#1e293b !important}
-  .exam-board .ep-tbox{background:linear-gradient(160deg,#fffdf5,#f7f0dc);border:1.5px solid rgba(201,162,39,.5);color:#0b1e3b;box-shadow:0 4px 10px -6px rgba(201,162,39,.5)}
-  .exam-board .ep-tbox span{color:#0b1e3b}
-  .exam-board .ep-tbox small{color:#8a6d10}
-  .exam-board .ep-tbox input,.exam-board .ep-tbox select{color:#1e293b}
-  .exam-board .ep-table td{color:#1e293b}
-  .exam-board .ep-table input[type=text]{color:#1e293b}
-  .exam-board .ep-table input[type=text]::placeholder{color:rgba(30,41,59,.5)}
-  .exam-board .ep-table th{color:#8a6d10;background:rgba(201,162,39,.12);border-bottom:2px solid var(--exb-gold)}
-  .exam-board .ep-table tr{border-bottom:1px solid rgba(201,162,39,.18)}
-  .exam-board .ep-check{border-color:rgba(11,30,59,.4)}
-  .exam-board .ep-check:hover{border-color:#0b1e3b}
-  .exam-board .ep-check.on{background:linear-gradient(135deg,var(--exb-gold),var(--exb-gold2));box-shadow:0 4px 12px -2px rgba(201,162,39,.6);color:#0b1e3b}
-  .exam-board .ep-cal-cell{background:rgba(11,30,59,.06);color:#1e293b}
-  .exam-board-headline{background:linear-gradient(120deg,#ffd97a 0%,#ff97b3 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:'Sora',sans-serif;letter-spacing:.5px}
+  .exam-board .ep-panel:hover{transform:translateY(-3px);box-shadow:0 18px 44px -18px rgba(109,87,245,.45)}
+  .exam-board .ep-title{color:#fff;text-transform:none;letter-spacing:.2px;font-size:1.05rem}
+  /* headings & body text default to light on the dark board */
+  .exam-board h1,.exam-board h2,.exam-board h3,.exam-board h4,.exam-board h5{color:#fff}
+  .exam-board p,.exam-board span,.exam-board li,.exam-board label,.exam-board td{color:#e2e8f0}
+  /* countdown boxes — brand-tinted glass */
+  .exam-board .ep-tbox{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);color:#fff;
+    -webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    box-shadow:0 4px 14px -6px rgba(109,87,245,.5), inset 0 1px 0 rgba(255,255,255,.12)}
+  .exam-board .ep-tbox span{color:#fff}
+  .exam-board .ep-tbox small{color:#a3a4ff}
+  .exam-board .ep-tbox input,.exam-board .ep-tbox select{color:#fff}
+  /* routine table on glass */
+  .exam-board .ep-table td{color:#e2e8f0;border-bottom:1px solid rgba(255,255,255,.08)}
+  .exam-board .ep-table input[type=text]{color:#fff;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14)}
+  .exam-board .ep-table input[type=text]:focus{border-color:#857dff;background:rgba(255,255,255,.14)}
+  .exam-board .ep-table input[type=text]::placeholder{color:rgba(226,232,240,.45)}
+  .exam-board .ep-table th{color:#a3a4ff;background:rgba(109,87,245,.14);border-bottom:2px solid rgba(133,125,255,.55)}
+  .exam-board .ep-table tr{border-bottom:1px solid rgba(255,255,255,.06)}
+  .exam-board .ep-table tbody tr:hover{background:rgba(255,255,255,.05)}
+  /* checkbox — brand→teal like the focus timer */
+  .exam-board .ep-check{border-color:rgba(255,255,255,.45)}
+  .exam-board .ep-check:hover{border-color:#fff}
+  .exam-board .ep-check.on{background:linear-gradient(135deg,#6d57f5,#13bdb6);box-shadow:0 4px 12px -2px rgba(109,87,245,.6);color:#fff;border-color:transparent}
+  .exam-board .ep-cal-cell{background:rgba(255,255,255,.06);color:#e2e8f0}
+  .exam-board-headline{background:linear-gradient(120deg,#a3a4ff 0%,#34d8cf 100%);-webkit-background-clip:text;background-clip:text;color:transparent;font-family:'Sora',sans-serif;letter-spacing:.5px}
 
   /* Strict banner for the My Power hero */
   .exam-strict-hero{
@@ -534,34 +569,34 @@ tailwind.config = {
   .clock-wrap{width:260px;max-width:78vw;margin:0 auto;position:relative;-webkit-user-select:none;user-select:none;touch-action:none}
   .clock-face{
     width:100%;aspect-ratio:1;border-radius:50%;position:relative;
-    background:radial-gradient(circle at 50% 42%, #12325f, #0b1e3b 70%);
+    background:radial-gradient(circle at 50% 42%, #1e2547, #0b1220 70%);
     border:3px solid var(--exb-gold);
     box-shadow:0 14px 40px -14px rgba(0,0,0,.7), inset 0 0 30px rgba(0,0,0,.5);
   }
-  .clock-tick{position:absolute;left:50%;top:6%;transform-origin:0 700%;width:2px;height:9px;background:rgba(201,162,39,.55)}
+  .clock-tick{position:absolute;left:50%;top:6%;transform-origin:0 700%;width:2px;height:9px;background:rgba(133,125,255,.55)}
   .clock-num{position:absolute;font-family:'Sora',sans-serif;font-weight:800;font-size:.82rem;
-    color:#e6c14b;transform:translate(-50%,-50%);pointer-events:none}
+    color:#a3a4ff;transform:translate(-50%,-50%);pointer-events:none}
   .clock-hand{position:absolute;left:50%;bottom:50%;width:4px;background:var(--exb-gold2);
-    transform-origin:bottom center;border-radius:4px;box-shadow:0 0 8px rgba(230,193,75,.5);transition:transform .15s ease}
+    transform-origin:bottom center;border-radius:4px;box-shadow:0 0 8px rgba(133,125,255,.5);transition:transform .15s ease}
   .clock-hand.hour{height:24%;background:#fff;width:5px}
   .clock-hand.minute{height:33%}
   .clock-center{position:absolute;left:50%;top:50%;width:14px;height:14px;border-radius:50%;
-    background:var(--exb-gold);transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(11,30,59,.9);z-index:4}
+    background:var(--exb-gold);transform:translate(-50%,-50%);box-shadow:0 0 0 3px rgba(11,18,32,.9);z-index:4}
   .clock-knob{position:absolute;width:34px;height:34px;border-radius:50%;background:var(--exb-gold2);
     transform:translate(-50%,-50%);box-shadow:0 4px 10px rgba(0,0,0,.5);cursor:grab;z-index:5;
-    display:flex;align-items:center;justify-content:center;color:#0b1e3b;font-weight:800;font-size:.7rem}
+    display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:.7rem}
   .clock-knob:active{cursor:grabbing}
   .clock-mode-btn{padding:.35rem .8rem;border-radius:.6rem;font-weight:700;font-size:1.25rem;font-family:'Sora',sans-serif;
     background:rgba(255,255,255,.06);border:1px solid var(--exb-line);color:#e2e8f0;transition:.2s;min-width:64px}
-  .clock-mode-btn.active{background:linear-gradient(135deg,var(--exb-gold),var(--exb-gold2));color:#0b1e3b;border-color:transparent}
+  .clock-mode-btn.active{background:linear-gradient(135deg,#6d57f5,#13bdb6);color:#fff;border-color:transparent}
   .ampm-btn{padding:.3rem .7rem;border-radius:.5rem;font-weight:700;font-size:.75rem;
     background:rgba(255,255,255,.06);border:1px solid var(--exb-line);color:#cbd5e1;transition:.2s}
-  .ampm-btn.active{background:var(--exb-gold);color:#0b1e3b;border-color:transparent}
+  .ampm-btn.active{background:var(--exb-gold);color:#fff;border-color:transparent}
 
   /* Duration stepper for each task */
   .dur-step{width:34px;height:34px;border-radius:.6rem;background:rgba(255,255,255,.08);border:1px solid var(--exb-line);
-    color:#e6c14b;font-weight:800;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;transition:.15s}
-  .dur-step:hover{background:rgba(201,162,39,.2)}
+    color:#a3a4ff;font-weight:800;font-size:1.1rem;display:inline-flex;align-items:center;justify-content:center;transition:.15s}
+  .dur-step:hover{background:rgba(133,125,255,.2)}
 
   /* Task notification popup — hidden well off-screen until .show is added.
      (Previously it peeked into view on load because the negative offset was
@@ -579,10 +614,10 @@ tailwind.config = {
 
 <!-- ============ TASK TIME-OVER NOTIFICATION ============ -->
 <div id="taskNotif">
-  <div class="rounded-2xl p-4 shadow-2xl flex items-start gap-3" style="background:linear-gradient(155deg,#0b1e3b,#10294f);border:2px solid #c9a227">
-    <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl" style="background:rgba(201,162,39,.15);color:#e6c14b"><i class="fas fa-bell"></i></div>
+  <div class="rounded-2xl p-4 shadow-2xl flex items-start gap-3" style="background:linear-gradient(155deg,#131a33,#0b1220);border:1px solid rgba(133,125,255,.5)">
+    <div class="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 text-xl" style="background:linear-gradient(135deg,rgba(109,87,245,.35),rgba(19,189,182,.3));color:#a3a4ff"><i class="fas fa-bell"></i></div>
     <div class="flex-1 min-w-0">
-      <p class="font-extrabold text-[#e6c14b] text-sm" id="taskNotifTitle">Task time over!</p>
+      <p class="font-extrabold text-[#a3a4ff] text-sm" id="taskNotifTitle">Task time over!</p>
       <p class="text-slate-300 text-xs mt-0.5" id="taskNotifBody">Moving to your next task…</p>
     </div>
     <button onclick="document.getElementById('taskNotif').classList.remove('show')" class="w-7 h-7 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition flex-shrink-0"><i class="fas fa-xmark"></i></button>
@@ -1112,7 +1147,7 @@ tailwind.config = {
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
       <span class="exam-badge inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold shadow-sm mb-4"><i class="fas fa-award"></i> Examination Board</span>
       <h1 class="text-3xl lg:text-5xl font-extrabold font-display text-white">My Power — <span class="exam-board-headline">Exam Control Board</span></h1>
-      <p class="text-white/80 mt-4 max-w-2xl mx-auto">A focused, disciplined study board. Set your exam, build a timed routine with a circular clock, get alerts when each task ends & auto-move to the next.</p>
+      <p class="text-white/80 mt-4 max-w-2xl mx-auto">A focused, disciplined study board. Set your exam, build a timed routine with clear time slots, get alerts when each task ends & auto-move to the next.</p>
     </div>
   </section>
 
@@ -1125,7 +1160,7 @@ tailwind.config = {
       <div class="text-center mb-10 reveal">
         <span class="text-sm font-bold uppercase tracking-wider gradient-text">Official Examination Board</span>
         <h2 class="text-3xl lg:text-4xl font-extrabold font-display text-slate-900 dark:text-white mt-2">Exam Power Board</h2>
-        <p class="text-slate-500 dark:text-slate-400 mt-3 max-w-xl mx-auto text-sm sm:text-base">Set your exam, date & a strict timed routine using the circular clock. Each task has its own duration — when time is over you get an alert and the next task starts automatically.</p>
+        <p class="text-slate-500 dark:text-slate-400 mt-3 max-w-xl mx-auto text-sm sm:text-base">Set your exam, date & a strict timed routine with simple start times. Each task has its own duration — when time is over you get an alert and the next task starts automatically.</p>
       </div>
 
       <!-- ============ SETUP WIZARD ============ -->
@@ -1166,47 +1201,38 @@ tailwind.config = {
               </div>
             </div>
 
-            <!-- STEP 3 : hard routine (circular clock) -->
+            <!-- STEP 3 : simple timed routine -->
             <div class="ep-step hidden" data-step="3">
-              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#0b1e3b] to-[#10294f] border border-[#c9a227] flex items-center justify-center text-[#e6c14b] text-2xl mb-5 shadow-lg"><i class="fas fa-clock"></i></div>
+              <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#6d57f5] to-[#13bdb6] flex items-center justify-center text-white text-2xl mb-5 shadow-lg shadow-brand-500/30"><i class="fas fa-clock"></i></div>
               <h3 class="text-xl sm:text-2xl font-extrabold font-display text-slate-900 dark:text-white">Set a strict timed routine</h3>
-              <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-4">Use the circular clock to set each task's <b>start time</b>, then set how many <b>minutes</b> it should run. When time is over you'll get an alert & the next task starts.</p>
+              <p class="text-slate-500 dark:text-slate-400 text-sm mt-1 mb-4">Pick each task's <b>start time</b> and set how many <b>minutes</b> it runs. We'll show the exact time slot (e.g. 5:00 PM – 5:30 PM). When a task's time is over you'll get an alert & the next task starts.</p>
 
-              <!-- CIRCULAR CLOCK CARD -->
-              <div class="rounded-2xl p-4 sm:p-5 mb-4" style="background:linear-gradient(160deg,#0b1e3b,#0a1729);border:1px solid rgba(201,162,39,.35)">
-                <!-- digital readout + mode toggle -->
-                <div class="flex items-center justify-center gap-2 mb-4">
-                  <button type="button" id="clkHourBtn" class="clock-mode-btn active" data-mode="hour">04</button>
-                  <span class="text-2xl font-extrabold text-[#e6c14b]">:</span>
-                  <button type="button" id="clkMinBtn" class="clock-mode-btn" data-mode="minute">00</button>
-                  <div class="flex flex-col gap-1 ml-2">
-                    <button type="button" id="clkAM" class="ampm-btn">AM</button>
-                    <button type="button" id="clkPM" class="ampm-btn active">PM</button>
+              <!-- SIMPLE START TIME + DURATION CARD -->
+              <div class="rounded-2xl p-4 sm:p-5 mb-4 space-y-4" style="background:linear-gradient(160deg,#131a33,#0b1220);border:1px solid rgba(133,125,255,.35)">
+                <!-- start time -->
+                <label class="block">
+                  <span class="text-xs font-bold uppercase tracking-wide text-[#a3a4ff] mb-1.5 block"><i class="fas fa-play mr-1"></i>Start time</span>
+                  <input id="epStartTime" type="time" value="17:00" class="w-full px-4 py-3 rounded-xl border-2 border-[#6d57f5]/40 bg-[#0b1220] text-white text-lg font-extrabold tracking-wide focus:outline-none focus:border-[#857dff] transition">
+                </label>
+                <!-- duration -->
+                <div>
+                  <span class="text-xs font-bold uppercase tracking-wide text-[#a3a4ff] mb-1.5 block"><i class="fas fa-hourglass-half mr-1"></i>Duration</span>
+                  <div class="flex items-center justify-between gap-2 rounded-xl px-3 py-2.5 bg-[#0b1220] border-2 border-[#6d57f5]/40">
+                    <button type="button" class="dur-step" data-d="-5">−</button>
+                    <span class="min-w-[92px] text-center font-extrabold text-white text-lg"><span id="epTaskDur">30</span> min</span>
+                    <button type="button" class="dur-step" data-d="5">+</button>
                   </div>
                 </div>
-                <!-- the clock -->
-                <div class="clock-wrap" id="clockWrap">
-                  <div class="clock-face" id="clockFace">
-                    <div class="clock-hand hour" id="clkHandHour"></div>
-                    <div class="clock-hand minute" id="clkHandMin"></div>
-                    <div class="clock-center"></div>
-                    <div class="clock-knob" id="clockKnob">00</div>
-                  </div>
+                <!-- live slot preview -->
+                <div class="text-center rounded-xl py-3 px-3 bg-[#6d57f5]/12 border border-[#13bdb6]/30">
+                  <p class="text-[11px] uppercase tracking-widest text-slate-400 mb-1">This task will run</p>
+                  <p id="epSlotPreview" class="text-lg sm:text-xl font-extrabold text-[#34d8cf]">5:00 PM – 5:30 PM</p>
                 </div>
-                <p class="text-center text-[11px] text-slate-400 mt-3"><i class="fas fa-hand-pointer mr-1"></i>Tap a number or drag the knob. Switch between <b class="text-[#e6c14b]">hour</b> & <b class="text-[#e6c14b]">minute</b> above.</p>
               </div>
 
-              <!-- task name + duration -->
-              <input id="epTaskName" type="text" placeholder="Task (e.g. Physics — Ch 4 problems)" class="w-full px-3 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white text-sm focus:outline-none focus:border-[#c9a227] mb-3">
-              <div class="flex items-center justify-between gap-2 mb-3 rounded-xl px-3 py-2.5 bg-slate-50 dark:bg-slate-900 border-2 border-slate-200 dark:border-slate-600">
-                <span class="text-sm font-semibold text-slate-600 dark:text-slate-300"><i class="fas fa-hourglass-half mr-1 text-[#c9a227]"></i>Duration</span>
-                <div class="flex items-center gap-2">
-                  <button type="button" class="dur-step" data-d="-5">−</button>
-                  <span class="min-w-[74px] text-center font-extrabold text-slate-800 dark:text-white"><span id="epTaskDur">30</span> min</span>
-                  <button type="button" class="dur-step" data-d="5">+</button>
-                </div>
-              </div>
-              <button id="epAddTask" class="w-full px-4 py-3 text-white font-semibold rounded-xl text-sm hover:scale-[1.02] transition" style="background:linear-gradient(135deg,#c9a227,#e6c14b);color:#0b1e3b"><i class="fas fa-plus mr-1"></i> Add task to routine</button>
+              <!-- task name -->
+              <input id="epTaskName" type="text" placeholder="Task (e.g. Physics — Ch 4 problems)" class="w-full px-3 py-2.5 rounded-xl border-2 border-slate-200 dark:border-slate-600 bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-white text-sm focus:outline-none focus:border-[#6d57f5] mb-3">
+              <button id="epAddTask" class="w-full px-4 py-3 text-white font-semibold rounded-xl text-sm hover:scale-[1.02] transition" style="background:linear-gradient(135deg,#6d57f5,#13bdb6);color:#fff"><i class="fas fa-plus mr-1"></i> Add task to routine</button>
 
               <div id="epTaskList" class="space-y-2 max-h-52 overflow-y-auto chat-scroll pr-1 my-3">
                 <p id="epTaskEmpty" class="text-slate-400 text-sm text-center py-6"><i class="fas fa-clipboard-list text-3xl block mb-2 opacity-50"></i>No tasks yet — add at least 3 for a strong routine.</p>
@@ -1214,7 +1240,7 @@ tailwind.config = {
 
               <div class="flex justify-between mt-4">
                 <button class="ep-back px-6 py-3 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 font-semibold rounded-xl hover:bg-slate-200 transition"><i class="fas fa-arrow-left mr-1"></i> Back</button>
-                <button id="epFinish" class="px-6 py-3 text-white font-semibold rounded-xl hover:scale-105 transition" style="background:linear-gradient(135deg,#0b1e3b,#10294f);border:1px solid #c9a227"><i class="fas fa-gavel mr-1"></i> Build My Board</button>
+                <button id="epFinish" class="px-6 py-3 text-white font-semibold rounded-xl hover:scale-105 transition" style="background:linear-gradient(135deg,#6d57f5,#4c30bd)"><i class="fas fa-gavel mr-1"></i> Build My Board</button>
               </div>
             </div>
           </div>
@@ -1229,7 +1255,7 @@ tailwind.config = {
             <stop offset="0%" stop-color="#34d399"/><stop offset="100%" stop-color="#10b7a6"/>
           </linearGradient>
         </defs></svg>
-        <div class="ep-door rounded-[2rem] p-5 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden">
+        <div class="ep-door exam-board rounded-[2rem] p-5 sm:p-8 lg:p-10 shadow-2xl relative overflow-hidden">
           <div class="exam-board-seal" title="Official Exam Board"><i class="fas fa-stamp"></i></div>
 
           <!-- top bar: title + timer -->
@@ -1306,10 +1332,10 @@ tailwind.config = {
               <table class="ep-table w-full text-sm ep-hand">
                 <thead>
                   <tr>
-                    <th class="w-20">Time</th>
+                    <th class="w-40">Time slot</th>
                     <th>Task</th>
                     <th class="w-16 text-center">Length</th>
-                    <th class="w-24 text-center">Time Left</th>
+                    <th class="w-28 text-center">Status</th>
                     <th class="w-24 text-center">Done or not</th>
                     <th class="w-48">Reason (if not done)</th>
                     <th class="w-10 text-center"></th>
@@ -1322,9 +1348,9 @@ tailwind.config = {
 
           <!-- actions -->
           <div class="flex flex-wrap items-center justify-between gap-3 mt-7">
-            <p class="text-xs text-white/60"><i class="fas fa-circle-info mr-1"></i>Tick tasks daily — the circular timer shows time left for each task & alerts + auto-advances when time is over.</p>
+            <p class="text-xs text-white/60"><i class="fas fa-circle-info mr-1"></i>Tick tasks daily — each task shows its time slot & time left & alerts + auto-advances when time is over.</p>
             <div class="flex flex-wrap gap-2">
-              <button id="epAddMore" class="px-4 py-2.5 font-semibold rounded-xl text-sm hover:scale-105 transition" style="background:linear-gradient(135deg,#c9a227,#e6c14b);color:#0b1e3b"><i class="fas fa-plus mr-1"></i> Add / edit tasks</button>
+              <button id="epAddMore" class="px-4 py-2.5 font-semibold rounded-xl text-sm hover:scale-105 transition" style="background:linear-gradient(135deg,#6d57f5,#13bdb6);color:#fff"><i class="fas fa-plus mr-1"></i> Add / edit tasks</button>
               <button id="epEdit" class="px-4 py-2.5 bg-white/15 text-white font-semibold rounded-xl text-sm hover:bg-white/25 transition border border-white/25 backdrop-blur"><i class="fas fa-pen mr-1"></i> Edit setup</button>
               <button id="epReset" class="px-4 py-2.5 bg-rose-500/90 text-white font-semibold rounded-xl text-sm hover:bg-rose-500 transition"><i class="fas fa-rotate-left mr-1"></i> Reset</button>
             </div>
@@ -2315,8 +2341,8 @@ setTimeout(()=>navHint.classList.remove('show'),4200);
    • sbNotes   → Notes uploads                 (notes project)
    • sbLib     → Library book uploads          (library project)
 ============================================================ */
-const SUPABASE_URL = 'https://fubmxgczsbtoopxoxjbg.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ1Ym14Z2N6c2J0b29weG94amJnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwMDU0OTcsImV4cCI6MjA5ODU4MTQ5N30.8DpDi5CPCOystSC4u0EtRh0njv6iegYDr61qUapWPUA';
+const SUPABASE_URL = 'https://vdavqialjbhtvzgyjpcm.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZkYXZxaWFsamJodHZ6Z3lqcGNtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODM3NDczMjIsImV4cCI6MjA5OTMyMzMyMn0.zZSGyPz16MQlf-vV_BldV_1hEZL00PvkL2brQF7h3v4';
 const VIDEO_BUCKET = 'videos';
 
 /* --- Notes project --- */
@@ -3214,94 +3240,38 @@ window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRouti
   }));
   document.querySelectorAll('#epSetup .ep-back').forEach(b=>b.addEventListener('click',()=>showStep(step-1)));
 
-  /* ---------- CIRCULAR CLOCK PICKER ---------- */
-  // clkHour: 1..12, clkMin: 0..59, clkAP: 'AM'|'PM', clkMode: 'hour'|'minute'
-  let clkHour=4, clkMin=0, clkAP='PM', clkMode='hour', clkDur=30;
-  const CLK_FACE=()=>$('clockFace');
+  /* ---------- SIMPLE START-TIME + DURATION PICKER ---------- */
+  // clkDur = duration in minutes. Start time comes straight from the <input type="time">.
+  let clkDur=30;
 
-  function build24(){ // returns "HH:MM" 24h from clock state
-    let h=clkHour%12; if(clkAP==='PM') h+=12;
-    return String(h).padStart(2,'0')+':'+String(clkMin).padStart(2,'0');
+  function build24(){ // returns "HH:MM" 24h from the time input
+    const v=$('epStartTime').value;
+    return /^\d{2}:\d{2}$/.test(v) ? v : '17:00';
   }
-  function drawClockNumbers(){
-    const face=CLK_FACE(); if(!face) return;
-    // remove old numbers & ticks
-    face.querySelectorAll('.clock-num,.clock-tick').forEach(e=>e.remove());
-    const R=42; // % radius for numbers
-    const vals = clkMode==='hour' ? [12,1,2,3,4,5,6,7,8,9,10,11] : [0,5,10,15,20,25,30,35,40,45,50,55];
-    vals.forEach((v,i)=>{
-      const ang=(i/12)*2*Math.PI - Math.PI/2;
-      const x=50+R*Math.cos(ang), y=50+R*Math.sin(ang);
-      const n=document.createElement('div'); n.className='clock-num';
-      n.style.left=x+'%'; n.style.top=y+'%';
-      n.textContent = clkMode==='hour' ? v : String(v).padStart(2,'0');
-      face.appendChild(n);
-    });
+  // "HH:MM" 24h  +  minutes  ->  "HH:MM" 24h (clamped to same day)
+  function addMinutes(hhmm, mins){
+    let [h,m]=hhmm.split(':').map(Number);
+    let total=Math.min(24*60-1, h*60+m+mins);
+    return String(Math.floor(total/60)).padStart(2,'0')+':'+String(total%60).padStart(2,'0');
   }
-  function clockUpdateHands(){
-    // hour hand angle
-    const hAng=((clkHour%12)/12)*360;
-    const mAng=(clkMin/60)*360;
-    $('clkHandHour').style.transform=`translateX(-50%) rotate(${hAng}deg)`;
-    $('clkHandMin').style.transform=`translateX(-50%) rotate(${mAng}deg)`;
-    // knob position along the active hand
-    const face=CLK_FACE(); const rect=face.getBoundingClientRect();
-    const activeVal = clkMode==='hour' ? clkHour%12 : clkMin;
-    const activeMax = clkMode==='hour' ? 12 : 60;
-    const ang=(activeVal/activeMax)*2*Math.PI - Math.PI/2;
-    const R=42;
-    const x=50+R*Math.cos(ang), y=50+R*Math.sin(ang);
-    const knob=$('clockKnob'); knob.style.left=x+'%'; knob.style.top=y+'%';
-    knob.textContent = clkMode==='hour' ? clkHour : String(clkMin).padStart(2,'0');
-    // digital readout
-    $('clkHourBtn').textContent=String(clkHour).padStart(2,'0');
-    $('clkMinBtn').textContent=String(clkMin).padStart(2,'0');
+  // update the live "5:00 PM – 5:30 PM" preview under the picker
+  function updateSlotPreview(){
+    const start=build24();
+    const end=addMinutes(start, clkDur);
+    const el=$('epSlotPreview');
+    if(el) el.textContent=formatTime(start)+' – '+formatTime(end);
   }
-  function setClockMode(m){
-    clkMode=m;
-    $('clkHourBtn').classList.toggle('active',m==='hour');
-    $('clkMinBtn').classList.toggle('active',m==='minute');
-    drawClockNumbers(); clockUpdateHands();
-  }
-  function setAMPM(ap){
-    clkAP=ap;
-    $('clkAM').classList.toggle('active',ap==='AM');
-    $('clkPM').classList.toggle('active',ap==='PM');
-  }
-  // pointer → value on the clock
-  function pointToValue(clientX,clientY){
-    const face=CLK_FACE(); const r=face.getBoundingClientRect();
-    const cx=r.left+r.width/2, cy=r.top+r.height/2;
-    let ang=Math.atan2(clientY-cy, clientX-cx)+Math.PI/2;
-    if(ang<0) ang+=2*Math.PI;
-    if(clkMode==='hour'){
-      let h=Math.round(ang/(2*Math.PI)*12); if(h===0)h=12; if(h>12)h=12;
-      clkHour=h;
-    } else {
-      let m=Math.round(ang/(2*Math.PI)*60)%60;
-      clkMin=m;
-    }
-    clockUpdateHands();
-  }
-  // clock event wiring
+  // wiring for the time input + duration steppers
   function initClock(){
-    $('clkHourBtn').addEventListener('click',()=>setClockMode('hour'));
-    $('clkMinBtn').addEventListener('click',()=>setClockMode('minute'));
-    $('clkAM').addEventListener('click',()=>setAMPM('AM'));
-    $('clkPM').addEventListener('click',()=>setAMPM('PM'));
-    const face=CLK_FACE();
-    let dragging=false;
-    const down=e=>{ dragging=true; const p=e.touches?e.touches[0]:e; pointToValue(p.clientX,p.clientY); e.preventDefault(); };
-    const move=e=>{ if(!dragging)return; const p=e.touches?e.touches[0]:e; pointToValue(p.clientX,p.clientY); e.preventDefault(); };
-    const up=()=>{ if(dragging && clkMode==='hour'){ setClockMode('minute'); } dragging=false; };
-    face.addEventListener('mousedown',down); window.addEventListener('mousemove',move); window.addEventListener('mouseup',up);
-    face.addEventListener('touchstart',down,{passive:false}); window.addEventListener('touchmove',move,{passive:false}); window.addEventListener('touchend',up);
-    // duration steppers
+    const startInp=$('epStartTime');
+    if(startInp) startInp.addEventListener('input', updateSlotPreview);
     document.querySelectorAll('.dur-step').forEach(b=>b.addEventListener('click',()=>{
       clkDur=Math.max(5,Math.min(240, clkDur+parseInt(b.dataset.d)));
       $('epTaskDur').textContent=clkDur;
+      updateSlotPreview();
     }));
-    setAMPM('PM'); setClockMode('hour');
+    $('epTaskDur').textContent=clkDur;
+    updateSlotPreview();
   }
 
   // add task in wizard (with duration)
@@ -3312,9 +3282,9 @@ window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRouti
     wizardTasks.forEach((t,i)=>{
       const row=document.createElement('div');
       row.className='ep-wt flex items-center gap-3 bg-slate-50 dark:bg-slate-900 rounded-xl px-3 py-2.5 border border-slate-200 dark:border-slate-700';
-      row.innerHTML=`<span class="text-xs font-bold text-[#b5891f] dark:text-[#e6c14b] w-14">${formatTime(t.time)}</span>
+      row.innerHTML=`<span class="text-xs font-bold text-[#5b3fe0] dark:text-[#a3a4ff] w-14">${formatTime(t.time)}</span>
         <span class="flex-1 text-sm text-slate-700 dark:text-slate-200 truncate">${t.task.replace(/</g,'&lt;')}</span>
-        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#c9a227]/15 text-[#b5891f] dark:text-[#e6c14b] whitespace-nowrap">${t.dur||30}m</span>
+        <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#6d57f5]/15 text-[#5b3fe0] dark:text-[#a3a4ff] whitespace-nowrap">${t.dur||30}m</span>
         <button data-i="${i}" class="ep-wt-del w-7 h-7 rounded-lg text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10 transition"><i class="fas fa-trash text-xs"></i></button>`;
       list.appendChild(row);
     });
@@ -3436,7 +3406,7 @@ window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRouti
     const next=sorted.slice(pos+1).find(x=>!x.done);
     if(next){
       showTaskNotif('⏰ Time over: '+finishedTask.task,
-        'Next task now: <b class="text-[#e6c14b]">'+next.task.replace(/</g,'&lt;')+'</b> ('+formatTime(next.time)+' • '+(next.dur||30)+' min)');
+        'Next task now: <b class="text-[#a3a4ff]">'+next.task.replace(/</g,'&lt;')+'</b> ('+formatTime(next.time)+' • '+(next.dur||30)+' min)');
     } else {
       showTaskNotif('⏰ Time over: '+finishedTask.task,
         finishedTask.done? 'All tasks handled — great discipline!' : 'That was your last task for today. Tick what you completed.');
@@ -3449,10 +3419,10 @@ window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRouti
     const body=$('epRoutineBody');
     body.innerHTML=data.tasks.map((t,idx)=>`
       <tr data-id="${t.id}" data-idx="${idx}">
-        <td class="whitespace-nowrap font-semibold">${formatTime(t.time)}</td>
+        <td class="whitespace-nowrap font-semibold">${formatTime(t.time)} – ${formatTime(addMinutes(t.time, t.dur||30))}</td>
         <td>${t.task.replace(/</g,'&lt;')}</td>
-        <td class="text-center whitespace-nowrap"><span class="text-xs font-bold text-[#e6c14b]">${t.dur||30}m</span></td>
-        <td class="text-center ep-ring-cell" data-idx="${idx}"></td>
+        <td class="text-center whitespace-nowrap"><span class="text-xs font-bold text-[#a3a4ff]">${t.dur||30}m</span></td>
+        <td class="text-center ep-status-cell" data-idx="${idx}"></td>
         <td class="text-center"><span class="ep-check ${t.done?'on':''}" data-act="toggle"><i class="fas fa-check text-xs"></i></span></td>
         <td><input type="text" data-act="reason" value="${(t.reason||'').replace(/"/g,'&quot;')}" placeholder="${t.done?'—':'why not done?'}" ${t.done?'disabled':''}></td>
         <td class="text-center"><button data-act="del" class="w-7 h-7 rounded-lg text-white/50 hover:text-rose-300 hover:bg-rose-500/20 transition"><i class="fas fa-trash text-xs"></i></button></td>
@@ -3474,87 +3444,58 @@ window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRouti
     }));
     const done=data.tasks.filter(t=>t.done).length;
     $('epRoutineStat').textContent=`${done} / ${data.tasks.length} done`;
-    // build the circular timers, then start ticking them
-    buildRings(); renderRings();
+    // paint the simple status text, then keep it updated each second
+    renderRings();
   }
 
-  // create the ring SVG markup once per row
-  function buildRings(){
-    document.querySelectorAll('#epRoutineBody .ep-ring-cell').forEach(cell=>{
-      cell.innerHTML=`
-        <div class="ep-ring-wrap inline-flex align-middle">
-          <svg class="ep-ring" viewBox="0 0 52 52">
-            <circle class="ep-ring-track" cx="26" cy="26" r="${RING_R}"></circle>
-            <circle class="ep-ring-prog" cx="26" cy="26" r="${RING_R}"
-              stroke-dasharray="${RING_C.toFixed(1)}" stroke-dashoffset="0"></circle>
-          </svg>
-          <div class="ep-ring-label"><span class="ep-ring-time">--</span><span class="ep-ring-unit"></span></div>
-        </div>`;
-    });
+  // format a millisecond gap into a short "1h 05m" / "12m 30s" / "45s" string
+  function fmtGap(ms){
+    const h=Math.floor(ms/3600000), m=Math.floor(ms%3600000/60000), s=Math.floor(ms%60000/1000);
+    if(h>0) return h+'h '+String(m).padStart(2,'0')+'m';
+    if(m>0) return m+'m '+String(s).padStart(2,'0')+'s';
+    return s+'s';
   }
 
-  // update every ring's remaining time; called each second
+  // Update every row's simple STATUS text (no circular clock). Called each second.
+  // States: Done ✓ · Starts in … · running "Time left …" · Time over.
   function renderRings(){
     const now=new Date();
     document.querySelectorAll('#epRoutineBody tr').forEach(tr=>{
       const idx=+tr.dataset.idx;
       const id=tr.dataset.id, t=data.tasks.find(x=>x.id===id);
-      const cell=tr.querySelector('.ep-ring-cell'); if(!cell) return;
-      const wrap=cell.querySelector('.ep-ring-wrap');
-      const prog=cell.querySelector('.ep-ring-prog');
-      const timeEl=cell.querySelector('.ep-ring-time');
-      const unitEl=cell.querySelector('.ep-ring-unit');
-      if(!wrap) return;
+      const cell=tr.querySelector('.ep-status-cell'); if(!cell) return;
 
-      // if the task is already ticked done, show a completed state (no "over")
+      // already ticked done → simple green "Done"
       if(t.done){
-        wrap.classList.remove('over','soon'); wrap.classList.add('done');
-        cell.innerHTML=`<span class="inline-flex items-center gap-1 text-emerald-600 text-xs font-bold"><i class="fas fa-circle-check"></i> Done</span>`;
+        cell.innerHTML=`<span class="ep-stat ep-stat-done"><i class="fas fa-circle-check"></i> Done</span>`;
         return;
       }
 
       const {start,end}=taskWindow(idx);
-      const total=end-start;
       let remain=end-now;
 
       if(now<start){
-        // upcoming — show waiting state with time until it starts
-        const untilStart=start-now;
-        wrap.classList.remove('over','soon');
-        prog.style.strokeDashoffset=RING_C; // empty ring
-        prog.style.stroke='rgba(11,30,59,.28)';
-        const mm=Math.floor(untilStart/60000);
-        timeEl.textContent = mm>=60 ? Math.floor(mm/60)+'h' : mm+'m';
-        unitEl.textContent='starts in';
+        // upcoming
+        cell.innerHTML=`<span class="ep-stat ep-stat-wait"><i class="fas fa-hourglass-start"></i> Starts in ${fmtGap(start-now)}</span>`;
         return;
       }
 
       if(remain<=0){
-        // time is over → replace ring cell with a clear "Task Time Over" badge
-        cell.innerHTML=`<span class="ep-over-badge"><i class="fas fa-hourglass-end"></i> Task Time Over</span>`;
+        // time is over → clear "Time over" badge
+        cell.innerHTML=`<span class="ep-stat ep-stat-over"><i class="fas fa-hourglass-end"></i> Time over</span>`;
         // fire a one-time notification & advance to the next task
         if(!t.notified){
           t.notified=true; save();
           // Only pop the alert for tasks that expire while the user is actively
-          // watching the board. Tasks already over when the board first loads are
-          // marked handled SILENTLY, so the notification no longer keeps showing
-          // on every page load / page switch.
+          // watching the board (not for tasks already past-due on first load).
           if(boardReady){ handleTaskOver(idx, t); }
         }
         return;
       }
 
-      // running: draw the progress ring (fills DOWN as time passes)
-      const frac=Math.max(0,Math.min(1,remain/total));
-      prog.style.stroke=''; // use gradient
-      prog.style.strokeDashoffset=(RING_C*(1-frac)).toFixed(1);
-      wrap.classList.toggle('soon', remain<=5*60*1000); // < 5 min → amber warning
-
-      // format remaining time compactly
-      const h=Math.floor(remain/3600000), m=Math.floor(remain%3600000/60000), s=Math.floor(remain%60000/1000);
-      if(h>0){ timeEl.textContent=h+':'+String(m).padStart(2,'0'); unitEl.textContent='hr:min'; }
-      else if(m>0){ timeEl.textContent=m+':'+String(s).padStart(2,'0'); unitEl.textContent='min:sec'; }
-      else { timeEl.textContent=s; unitEl.textContent='sec'; }
+      // running → show remaining time; amber when under 5 min
+      const soon = remain<=5*60*1000;
+      cell.innerHTML=`<span class="ep-stat ${soon?'ep-stat-soon':'ep-stat-run'}"><i class="fas fa-clock"></i> ${fmtGap(remain)} left</span>`;
     });
   }
 
@@ -3703,6 +3644,10 @@ window.removeRoutine=(id)=>{ routines=routines.filter(r=>r.id!==id); renderRouti
       $('epExamName').value=data.exam||''; $('epExamDate').value=data.date||'';
       wizardTasks=data.tasks.map(t=>({time:t.time,task:t.task,dur:t.dur||30}));
     } else { wizardTasks=[]; $('epExamName').value=''; $('epExamDate').value=''; }
+    // reset the start-time + duration picker to defaults each time setup opens
+    clkDur=30; if($('epTaskDur')) $('epTaskDur').textContent=clkDur;
+    if($('epStartTime')) $('epStartTime').value='17:00';
+    updateSlotPreview();
     // Show a "Back to Board" button whenever an existing board can be returned to
     const canReturn = !!(data && Array.isArray(data.tasks) && data.tasks.length);
     const b2b=$('epBackToBoard');
@@ -4449,6 +4394,9 @@ document.querySelectorAll('button').forEach(b=>{
   }
 });
 </script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
