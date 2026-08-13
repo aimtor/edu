@@ -9,23 +9,67 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="mobile-web-app-capable" content="yes">
-<meta name="description" content="Aimtor — the all-in-one learning app for students. Video lessons, notes, library, quiz, play cards, AI tutor & study tools.">
+<meta name="description" id="metaDescription" content="Aimtor — the all-in-one learning app for students. Video lessons, notes, library, quiz, play cards, AI tutor & study tools.">
 <title>Aimtor — Learn. Grow. Achieve.</title>
+
+<!-- ================== SEO CORE (Aimtor SEO Engine) ================== -->
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="keywords" content="Aimtor, free class notes, video lessons, online library books, study notes PDF, Class 1-12 notes, SSC HSC notes, admission preparation, job preparation notes, free books download, AI tutor, quiz app for students">
+<meta name="author" content="Aimtor">
+<meta property="og:type" content="website" id="ogType">
+<meta property="og:site_name" content="Aimtor">
+<meta property="og:title" id="ogTitle" content="Aimtor — Learn. Grow. Achieve. | Free Classes, Notes & Library">
+<meta property="og:description" id="ogDesc" content="Aimtor — the all-in-one learning app for students. Free video lessons, class notes, online book library, quizzes, play cards, AI tutor & study tools.">
+<meta property="og:url" id="ogUrl" content="">
+<meta property="og:locale" content="en_US">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" id="twTitle" content="Aimtor — Learn. Grow. Achieve.">
+<meta name="twitter:description" id="twDesc" content="Free video lessons, class notes, online book library, quizzes & AI study tools for students.">
+<link rel="canonical" id="canonicalLink" href="">
+<!-- Base structured data: WebSite + SearchAction + EducationalOrganization -->
+<script type="application/ld+json" id="ldBase">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://aimtor.app/#website",
+      "url": "https://aimtor.app/",
+      "name": "Aimtor",
+      "description": "The all-in-one learning app for students — free video lessons, class notes, online book library, quizzes, AI tutor & study tools.",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": { "@type": "EntryPoint", "urlTemplate": "https://aimtor.app/#notes?q={search_term_string}" },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@type": "EducationalOrganization",
+      "@id": "https://aimtor.app/#org",
+      "name": "Aimtor",
+      "url": "https://aimtor.app/",
+      "description": "Aimtor provides free educational video classes, study notes and a digital book library for students of Class 1–12, SSC/HSC, admission and job preparation.",
+      "sameAs": []
+    }
+  ]
+}
+</script>
+<!-- ================== /SEO CORE ================== -->
 <script src="https://cdn.tailwindcss.com"></script>
 <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <!-- ================== Favicons (Aimtor logo) — FIXED ================== -->
 <!-- 1) Inline data-URI icon: guaranteed to display even if icon files are missing on the server -->
-<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
-<!-- 2) File-based icons (relative paths + ?v=2 cache-buster so browsers drop the old cached favicon) -->
-<link rel="icon" href="favicon.ico?v=2" sizes="48x48">
-<link rel="shortcut icon" href="favicon.ico?v=2">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=2">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=2">
-<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png?v=2">
-<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=2">
-<link rel="manifest" href="site.webmanifest?v=2">
+<link rel="icon" type="image/png" sizes="32x32" href="data:image/png;base64,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">
+<!-- 2) File-based icons (relative paths + ?v=3 cache-buster so browsers drop the old cached favicon) -->
+<link rel="icon" href="favicon.ico?v=3" sizes="48x48">
+<link rel="shortcut icon" href="favicon.ico?v=3">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png?v=3">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png?v=3">
+<link rel="icon" type="image/png" sizes="48x48" href="favicon-48.png?v=3">
+<link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=3">
+<link rel="manifest" href="site.webmanifest?v=3">
 <!-- Supabase JS SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1716,6 +1760,50 @@ tailwind.config = {
 <!-- /MAIN -->
 
 <!-- ============ FOOTER ============ -->
+<!-- ================== SEO CONTENT INDEX (crawlable A–Z directory of all uploaded content) ================== -->
+<section id="seo-content-index" class="bg-slate-100 dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-10" aria-label="Browse all Aimtor content">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <details class="group">
+      <summary class="cursor-pointer list-none flex items-center gap-2 text-sm font-bold text-slate-600 dark:text-slate-300 hover:text-brand-600">
+        <i class="fas fa-sitemap text-brand-500"></i> Browse all classes, notes &amp; books (A–Z index)
+        <i class="fas fa-chevron-down text-xs transition group-open:rotate-180"></i>
+      </summary>
+      <div class="mt-6 grid md:grid-cols-3 gap-8 text-sm">
+        <nav aria-label="All video classes">
+          <h2 class="font-extrabold text-slate-800 dark:text-white mb-3"><i class="fas fa-chalkboard-user text-brand-500 mr-1.5"></i>Video Classes</h2>
+          <ul id="seoIndexClasses" class="space-y-1.5 text-slate-500 dark:text-slate-400"><li><a href="?p=class" class="hover:text-brand-600 underline-offset-2 hover:underline">All video classes</a></li></ul>
+        </nav>
+        <nav aria-label="All study notes">
+          <h2 class="font-extrabold text-slate-800 dark:text-white mb-3"><i class="fas fa-book-open text-sunset-500 mr-1.5"></i>Study Notes</h2>
+          <ul id="seoIndexNotes" class="space-y-1.5 text-slate-500 dark:text-slate-400"><li><a href="?p=notes" class="hover:text-brand-600 underline-offset-2 hover:underline">All study notes</a></li></ul>
+        </nav>
+        <nav aria-label="All library books">
+          <h2 class="font-extrabold text-slate-800 dark:text-white mb-3"><i class="fas fa-book-bookmark text-plum-500 mr-1.5"></i>Library Books</h2>
+          <ul id="seoIndexBooks" class="space-y-1.5 text-slate-500 dark:text-slate-400"><li><a href="?p=library" class="hover:text-brand-600 underline-offset-2 hover:underline">All library books</a></li></ul>
+        </nav>
+      </div>
+      <div class="mt-8 flex flex-wrap items-center gap-3">
+        <button onclick="AimtorSEO.downloadSitemap()" class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-brand-400 transition"><i class="fas fa-file-code mr-1.5 text-brand-500"></i>Download sitemap.xml</button>
+        <button onclick="AimtorSEO.downloadRobots()" class="px-4 py-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg text-xs font-semibold text-slate-600 dark:text-slate-300 hover:border-brand-400 transition"><i class="fas fa-robot mr-1.5 text-aqua-500"></i>Download robots.txt</button>
+        <span class="text-[11px] text-slate-400">Upload both files next to index.html, then submit sitemap.xml in Google Search Console.</span>
+      </div>
+    </details>
+  </div>
+</section>
+<!-- Crawler fallback for non-JS bots -->
+<noscript>
+  <div style="max-width:960px;margin:2rem auto;padding:1rem">
+    <h2>Aimtor — Free Classes, Notes &amp; Library</h2>
+    <p>Aimtor is a free learning platform for students: video classes, study notes (Class 1–12, SSC, HSC, admission &amp; job preparation) and a digital book library.</p>
+    <ul>
+      <li><a href="?p=class">Video Classes</a></li>
+      <li><a href="?p=notes">Study Notes</a></li>
+      <li><a href="?p=library">Library Books</a></li>
+    </ul>
+  </div>
+</noscript>
+<!-- ================== /SEO CONTENT INDEX ================== -->
+
 <footer class="bg-slate-900 dark:bg-black text-slate-300 pt-16 pb-24">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="grid md:grid-cols-4 gap-10">
@@ -1972,6 +2060,45 @@ tailwind.config = {
       <button type="submit" id="bUpSubmit" class="w-full py-3 gradient-plum text-white font-semibold rounded-xl shadow-lg shadow-plum-500/30 hover:scale-[1.02] transition flex items-center justify-center gap-2"><i class="fas fa-paper-plane"></i> Publish Book</button>
       <p class="text-center text-xs text-slate-400">By uploading you agree to share educational content responsibly.</p>
     </form>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ============ PDF PREVIEW VIEWER (Notes & Library) ========== -->
+<!-- ============================================================ -->
+<div id="pdfViewer" class="fixed inset-0 z-[140] hidden flex-col bg-slate-950/95 backdrop-blur-sm">
+  <!-- toolbar -->
+  <div class="flex items-center gap-2 sm:gap-3 px-3 sm:px-5 py-3 bg-slate-900 text-white border-b border-white/10 shadow-lg flex-shrink-0">
+    <div class="w-10 h-10 rounded-xl gradient-plum flex items-center justify-center flex-shrink-0 shadow-md"><i class="fas fa-file-pdf"></i></div>
+    <div class="flex-1 min-w-0">
+      <p id="pdfTitle" class="font-bold font-display text-sm sm:text-base truncate leading-tight">Document</p>
+      <p id="pdfSub" class="text-[11px] text-slate-400 truncate">PDF preview</p>
+    </div>
+    <a id="pdfOpenTab" href="#" target="_blank" rel="noopener" class="hidden sm:inline-flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-semibold transition" title="Open in new tab"><i class="fas fa-up-right-from-square"></i> New tab</a>
+    <a id="pdfDownload" href="#" download target="_blank" rel="noopener" class="inline-flex items-center gap-1.5 px-3 py-2 bg-gold-400 text-plum-900 hover:scale-105 rounded-lg text-xs font-bold transition" title="Download"><i class="fas fa-download"></i><span class="hidden sm:inline"> Download</span></a>
+    <button id="pdfClose" class="w-10 h-10 rounded-xl bg-white/10 hover:bg-rose-500 flex items-center justify-center transition flex-shrink-0" title="Close (Esc)"><i class="fas fa-xmark text-lg"></i></button>
+  </div>
+  <!-- document surface -->
+  <div id="pdfSurface" class="flex-1 relative overflow-hidden bg-slate-800">
+    <!-- loading state -->
+    <div id="pdfLoading" class="absolute inset-0 flex flex-col items-center justify-center text-slate-300 gap-3">
+      <i class="fas fa-spinner spin text-4xl text-plum-400"></i>
+      <p class="text-sm font-semibold">Loading preview…</p>
+    </div>
+    <!-- error / fallback state -->
+    <div id="pdfError" class="hidden absolute inset-0 flex-col items-center justify-center text-center text-slate-300 gap-4 px-6">
+      <div class="w-16 h-16 rounded-2xl bg-rose-500/20 text-rose-300 flex items-center justify-center text-3xl"><i class="fas fa-triangle-exclamation"></i></div>
+      <div>
+        <p class="font-bold text-white">Can't preview this file here</p>
+        <p class="text-sm text-slate-400 mt-1 max-w-xs mx-auto">Your browser blocked the inline preview. You can still open or download it.</p>
+      </div>
+      <div class="flex gap-3">
+        <a id="pdfErrOpen" href="#" target="_blank" rel="noopener" class="px-5 py-2.5 gradient-plum text-white text-sm font-semibold rounded-xl hover:scale-105 transition"><i class="fas fa-up-right-from-square mr-1"></i> Open</a>
+        <a id="pdfErrDl" href="#" download target="_blank" rel="noopener" class="px-5 py-2.5 bg-gold-400 text-plum-900 text-sm font-bold rounded-xl hover:scale-105 transition"><i class="fas fa-download mr-1"></i> Download</a>
+      </div>
+    </div>
+    <!-- the actual PDF frame -->
+    <iframe id="pdfFrame" class="w-full h-full border-0 bg-white" title="PDF preview" referrerpolicy="no-referrer"></iframe>
   </div>
 </div>
 
@@ -2411,7 +2538,8 @@ let curCat='all', curSearch='';
 function normalizeRow(r){
   return { id:r.id, cat:r.category, title:r.title, tutor:r.tutor,
     duration:r.duration||'—', views:(r.views!=null?formatViews(r.views):'New'),
-    level:r.level||'', desc:r.description||'', video_url:r.video_url };
+    level:r.level||'', desc:r.description||'', video_url:r.video_url,
+    created_at:r.created_at||null, uploaded:true };
 }
 function formatViews(n){ n=Number(n)||0; if(n>=1000) return (n/1000).toFixed(n>=10000?0:1)+'K'; return ''+n; }
 async function loadVideos(){
@@ -2429,6 +2557,7 @@ async function loadVideos(){
   const total=document.getElementById('videoTotalCount'); if(total) total.textContent=videos.length;
   window.firstVideoId = videos.length?videos[0].id:null;
   renderVideos(); renderAimPreviews();
+  if(window.AimtorSEO) AimtorSEO.contentUpdated('videos');
 }
 function videoCardHtml(v){
   const m=metaFor(v.cat);
@@ -2894,8 +3023,11 @@ function noteCardHtml(n){
       <p class="text-xs text-slate-500 dark:text-slate-400 mt-2 leading-relaxed line-clamp-3 flex-1">${blurb}</p>
       <p class="text-[11px] font-semibold text-slate-400 dark:text-slate-500 mt-3 flex items-center gap-1.5"><i class="far fa-file-lines"></i> ${pages} pages • PDF${n.uploaded?' • <span class="text-aqua-500">uploaded</span>':''}</p>
       ${ n.file_url
-        ? `<a href="${esc(n.file_url)}" target="_blank" rel="noopener" class="mt-4 w-full py-2.5 ${NOTE_BTN[color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-download"></i> Download</a>`
-        : `<button data-title="${title}" onclick="showAppToast('Downloading ' + this.dataset.title + '.pdf 📄')" class="mt-4 w-full py-2.5 ${NOTE_BTN[color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-download"></i> Download</button>` }
+        ? `<div class="mt-4 flex gap-2">
+             <button data-url="${esc(n.file_url)}" data-title="${title}" onclick="openPdfViewer(this.dataset.url, this.dataset.title, 'Note preview')" class="flex-1 py-2.5 ${NOTE_BTN[color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-eye"></i> Preview</button>
+             <a href="${esc(n.file_url)}" download target="_blank" rel="noopener" title="Download" class="w-11 flex items-center justify-center py-2.5 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg hover:bg-slate-200 dark:hover:bg-slate-600 transition"><i class="fas fa-download"></i></a>
+           </div>`
+        : `<button data-title="${title}" onclick="showAppToast('Preview not available — no file uploaded for &quot;' + this.dataset.title + '&quot; yet 📄')" class="mt-4 w-full py-2.5 ${NOTE_BTN[color]} text-sm font-semibold rounded-lg transition flex items-center justify-center gap-1.5"><i class="fas fa-eye"></i> Preview</button>` }
     </div>
   </article>`;
 }
@@ -3015,6 +3147,8 @@ function normalizeNoteRow(r,i){
     blurb: r.blurb||'',
     pages: r.pages||'—',
     file_url: r.file_url||null,
+    id: r.id != null ? r.id : null,
+    created_at: r.created_at||null,
     uploaded: true
   };
 }
@@ -3027,6 +3161,7 @@ async function loadUploadedNotes(){
     for(let i=notesData.length-1;i>=0;i--){ if(notesData[i].uploaded) notesData.splice(i,1); }
     (data||[]).map(normalizeNoteRow).reverse().forEach(n=>notesData.unshift(n));
     renderNotes(); renderAimPreviews();
+    if(window.AimtorSEO) AimtorSEO.contentUpdated('notes');
   }catch(e){ console.warn('Notes fetch failed:', e.message); }
 }
 loadUploadedNotes();
@@ -3874,7 +4009,7 @@ function renderModal(b){
       </div>
       <div class="flex flex-col sm:flex-row gap-3 mt-6">
         ${ b.file_url
-          ? `<a href="${b.file_url}" target="_blank" rel="noopener" class="flex-1 py-3 gradient-plum text-white font-semibold rounded-xl hover:scale-[1.02] transition text-center"><i class="fas fa-book-open-reader mr-1"></i> Read Online</a>
+          ? `<button type="button" data-url="${esc(b.file_url)}" data-title="${esc(b.title)}" data-author="${esc(b.author)}" onclick="openPdfViewer(this.dataset.url, this.dataset.title, 'by ' + this.dataset.author)" class="flex-1 py-3 gradient-plum text-white font-semibold rounded-xl hover:scale-[1.02] transition text-center"><i class="fas fa-book-open-reader mr-1"></i> Read Online</button>
              <a href="${b.file_url}" download target="_blank" rel="noopener" class="flex-1 py-3 bg-gold-400 text-plum-900 font-semibold rounded-xl hover:scale-[1.02] transition text-center"><i class="fas fa-download mr-1"></i> Download</a>`
           : `<button onclick="startReading(${b.id})" class="flex-1 py-3 gradient-plum text-white font-semibold rounded-xl hover:scale-[1.02] transition"><i class="fas fa-book-open-reader mr-1"></i> Read Online</button>
              <button onclick="showToast('Borrowed! Available offline for 14 days 📚')" class="flex-1 py-3 bg-gold-400 text-plum-900 font-semibold rounded-xl hover:scale-[1.02] transition"><i class="fas fa-download mr-1"></i> Borrow</button>` }
@@ -3890,6 +4025,86 @@ function closeBookModal(){ const m=document.getElementById('bookModal'); m.class
 document.getElementById('closeModal').addEventListener('click',closeBookModal);
 document.getElementById('bookModalBg').addEventListener('click',closeBookModal);
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeBookModal(); });
+
+/* ============================================================
+   ===== IN-APP PDF PREVIEW VIEWER (Notes + Library) ==========
+   Opens any PDF / document URL in a full-screen overlay with an
+   embedded viewer. Falls back gracefully to open/download links
+   if the browser blocks inline previewing.
+   ============================================================ */
+(function initPdfViewer(){
+  const el   = document.getElementById('pdfViewer');
+  if(!el) return;
+  const frame   = document.getElementById('pdfFrame');
+  const loading = document.getElementById('pdfLoading');
+  const errBox  = document.getElementById('pdfError');
+  const titleEl = document.getElementById('pdfTitle');
+  const subEl   = document.getElementById('pdfSub');
+  let loadTimer = null;
+
+  function isPdf(url){
+    try{ return /\.pdf(\?|#|$)/i.test(new URL(url, location.href).pathname + (url.split('?')[1]||'')); }
+    catch(_){ return /\.pdf(\?|#|$)/i.test(url); }
+  }
+  // Build the src used inside the iframe. PDFs get the native browser
+  // viewer (with toolbar hidden for a clean look); Google Docs viewer is
+  // used as a robust fallback for non-PDF office docs & cross-origin PDFs.
+  function buildSrc(url, forceGoogle){
+    if(forceGoogle) return 'https://docs.google.com/gviewer?embedded=true&url='+encodeURIComponent(url);
+    if(isPdf(url))  return url + (url.indexOf('#')>=0?'':'#') + 'toolbar=1&navpanes=0&view=FitH';
+    // non-pdf documents (doc/ppt/etc.) → Google viewer
+    return 'https://docs.google.com/gviewer?embedded=true&url='+encodeURIComponent(url);
+  }
+
+  function showError(url, name){
+    clearTimeout(loadTimer);
+    loading.classList.add('hidden');
+    errBox.classList.remove('hidden'); errBox.classList.add('flex');
+    frame.classList.add('opacity-0');
+    document.getElementById('pdfErrOpen').href = url;
+    document.getElementById('pdfErrDl').href   = url;
+    if(name) document.getElementById('pdfErrDl').setAttribute('download', name);
+  }
+
+  window.openPdfViewer = function(url, title, subtitle){
+    if(!url){ if(window.showAppToast) showAppToast('No file available to preview.'); return; }
+    title = title || 'Document';
+    // reset UI
+    errBox.classList.add('hidden'); errBox.classList.remove('flex');
+    loading.classList.remove('hidden');
+    frame.classList.remove('opacity-0');
+    titleEl.textContent = title;
+    subEl.textContent   = subtitle || (isPdf(url) ? 'PDF preview' : 'Document preview');
+    // toolbar links
+    const dl = document.getElementById('pdfDownload'), ot = document.getElementById('pdfOpenTab');
+    dl.href = url; dl.setAttribute('download', (title||'document').replace(/[^\w.-]+/g,'_'));
+    ot.href = url;
+    // load frame
+    frame.src = buildSrc(url, false);
+    // if it never fires load (blocked/x-frame), reveal fallback after a timeout
+    clearTimeout(loadTimer);
+    loadTimer = setTimeout(()=>{ /* only show error if still loading */
+      if(!loading.classList.contains('hidden')) loading.classList.add('hidden');
+    }, 2500);
+    frame.onload  = ()=>{ clearTimeout(loadTimer); loading.classList.add('hidden'); };
+    frame.onerror = ()=> showError(url, title);
+    // show overlay
+    el.classList.remove('hidden'); el.classList.add('flex');
+    document.body.style.overflow='hidden';
+  };
+
+  function closePdf(){
+    el.classList.add('hidden'); el.classList.remove('flex');
+    frame.src='about:blank';
+    document.body.style.overflow='';
+    clearTimeout(loadTimer);
+  }
+  window.closePdfViewer = closePdf;
+
+  document.getElementById('pdfClose').addEventListener('click', closePdf);
+  el.addEventListener('click', e=>{ if(e.target===el) closePdf(); });
+  document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !el.classList.contains('hidden')) closePdf(); });
+})();
 let toastTimer=null;
 function showToast(msg){ const t=document.getElementById('libToast'); t.textContent=msg; t.classList.remove('opacity-0'); t.classList.add('opacity-100'); clearTimeout(toastTimer); toastTimer=setTimeout(()=>{t.classList.add('opacity-0');t.classList.remove('opacity-100');},2200); }
 document.getElementById('libSearch').addEventListener('input',e=>{ libState.search=e.target.value.toLowerCase().trim(); renderLibrary(); });
@@ -3940,6 +4155,8 @@ function normalizeBookRow(r){
     color: m.color, icon: m.icon,
     desc: r.description || 'A newly uploaded book in the Aimtor Library.',
     file_url: r.file_url || null,
+    db_id: r.id != null ? r.id : null,
+    created_at: r.created_at||null,
     uploaded: true
   };
 }
@@ -3952,6 +4169,7 @@ async function loadUploadedBooks(){
     for(let i=books.length-1;i>=0;i--){ if(books[i].uploaded) books.splice(i,1); }
     (data||[]).map(normalizeBookRow).reverse().forEach(b=>books.unshift(b));
     renderLibrary(); renderAimPreviews();
+    if(window.AimtorSEO) AimtorSEO.contentUpdated('books');
   }catch(e){ console.warn('Books fetch failed:', e.message); }
 }
 loadUploadedBooks();
@@ -4400,16 +4618,288 @@ document.querySelectorAll('button').forEach(b=>{
   }
 });
 </script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
-<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+<script>
+/* ============================================================================
+   AIMTOR SEO ENGINE v1.0
+   Makes every uploaded class (video), note and book rank-able in Google:
+   1. Unique, indexable deep-link URLs per item  →  ?p=class&v=ID / ?p=notes&n=ID / ?p=library&b=ID
+   2. Dynamic <title>, meta description, canonical & Open Graph per page AND per item
+   3. JSON-LD structured data (VideoObject / LearningResource / Book + ItemList
+      + BreadcrumbList) regenerated live from Supabase content
+   4. Crawlable A–Z content index (real <a> links Googlebot follows)
+   5. sitemap.xml + robots.txt generator (buttons in the index section, or
+      open  yoursite.com/?seo=sitemap  to auto-download)
+============================================================================ */
+(function(){
+'use strict';
+const ORIGIN = location.origin + location.pathname.replace(/index\.html?$/,'');
+const $id = s => document.getElementById(s);
+const V = () => (typeof videos    !== 'undefined' ? videos    : []);
+const N = () => (typeof notesData !== 'undefined' ? notesData : []);
+const B = () => (typeof books     !== 'undefined' ? books     : []);
+const CUR = () => (typeof currentPage !== 'undefined' ? currentPage : 'aim');
+
+const PAGE_SEO = {
+  aim:    { t:'Aimtor — Learn. Grow. Achieve. | Free Classes, Notes & Library',
+            d:'Aimtor — the all-in-one learning app for students. Free video lessons, class notes, online book library, quizzes, play cards, AI tutor & study tools.' },
+  class:  { t:'Free Video Classes & Lessons for Students | Aimtor',
+            d:'Watch free video classes in Math, Physics, Chemistry, Biology, English, ICT and more — taught by expert tutors on Aimtor.' },
+  notes:  { t:'Free Study Notes PDF — Class 1–12, SSC, HSC, Admission & Job Prep | Aimtor',
+            d:'Download free PDF study notes for Class 1–12, SSC, HSC, university admission and job preparation. New notes uploaded regularly on Aimtor.' },
+  library:{ t:'Free Online Book Library — Read & Download Books | Aimtor',
+            d:'Read and download free books online: science, math, literature, history and technology titles in the Aimtor digital library.' },
+  mypower:{ t:'My Power — Quiz, Play Cards, AI Tutor & Study Tools | Aimtor',
+            d:'Boost your study power with quizzes, play cards, an AI tutor, streaks and smart planning tools on Aimtor.' },
+  plans:  { t:'Aimtor Plans & Pricing — Start Learning Free',
+            d:'Choose a free or premium Aimtor plan and unlock classes, notes, library books and AI study tools.' }
+};
+
+let itemOpen = null;   // {kind,key,id} while a modal/viewer is open
+let pendingDeep = null;
+
+/* ---------- URL helpers ---------- */
+function urlFor(page, key, id){
+  if(!page || page==='aim') return ORIGIN;
+  let u = ORIGIN + '?p=' + page;
+  if(key && id!=null) u += '&' + key + '=' + encodeURIComponent(id);
+  return u;
+}
+function setAddress(page, key, id){
+  try{
+    const rel = (page && page!=='aim')
+      ? '?p=' + page + (key && id!=null ? '&'+key+'='+encodeURIComponent(id) : '') + '#' + page
+      : location.pathname + '#aim';
+    history.replaceState(null,'',rel);
+  }catch(e){}
+}
+
+/* ---------- meta writers ---------- */
+function setMeta(title, desc, url, ogType){
+  document.title = title;
+  const put=(el,attr,val)=>{ if(el) el.setAttribute(attr,val); };
+  put($id('metaDescription'),'content',desc);
+  put($id('ogTitle'),'content',title);  put($id('twTitle'),'content',title);
+  put($id('ogDesc'),'content',desc);    put($id('twDesc'),'content',desc);
+  put($id('ogUrl'),'content',url);
+  put($id('ogType'),'content',ogType||'website');
+  put($id('canonicalLink'),'href',url);
+}
+function pageSeo(id){
+  const s = PAGE_SEO[id] || PAGE_SEO.aim;
+  setMeta(s.t, s.d, urlFor(id), 'website');
+}
+
+/* ---------- JSON-LD ---------- */
+function injectLd(id, data){
+  let el = $id(id);
+  if(!el){ el = document.createElement('script'); el.type='application/ld+json'; el.id=id; document.head.appendChild(el); }
+  el.textContent = JSON.stringify(data);
+}
+function crumb(page, pageName, itemName, itemUrl){
+  const items = [{ '@type':'ListItem', position:1, name:'Aimtor', item:ORIGIN },
+                 { '@type':'ListItem', position:2, name:pageName, item:urlFor(page) }];
+  if(itemName) items.push({ '@type':'ListItem', position:3, name:itemName, item:itemUrl });
+  return { '@type':'BreadcrumbList', itemListElement:items };
+}
+function ldVideo(v){
+  const u = urlFor('class','v',v.id);
+  const o = { '@type':'VideoObject', '@id':u, name:v.title, url:u,
+    description: v.desc || ('Free '+(v.cat||'video')+' class by '+(v.tutor||'Aimtor tutor')+' on Aimtor.'),
+    uploadDate: v.created_at || undefined,
+    thumbnailUrl: ORIGIN + 'favicon-192.png',
+    publisher: { '@type':'Organization', name:'Aimtor', url:ORIGIN },
+    learningResourceType:'Video lesson', inLanguage:'en', isAccessibleForFree:true };
+  if(v.video_url) o.contentUrl = v.video_url;
+  if(v.tutor) o.author = { '@type':'Person', name:v.tutor };
+  return o;
+}
+function ldNote(n){
+  const u = urlFor('notes','n',n.id);
+  return { '@type':'LearningResource', '@id':u, name:n.title, url:u,
+    description: n.blurb || (n.subject+' study notes for students — free PDF on Aimtor.'),
+    learningResourceType:'Study notes', educationalLevel: n.sub || n.main || undefined,
+    about: n.subject || undefined, encodingFormat:'application/pdf',
+    datePublished: n.created_at || undefined, inLanguage:'en', isAccessibleForFree:true,
+    provider: { '@type':'Organization', name:'Aimtor', url:ORIGIN } };
+}
+function ldBook(b){
+  const u = urlFor('library','b',b.id);
+  const o = { '@type':'Book', '@id':u, name:b.title, url:u,
+    description: b.desc || undefined,
+    author: { '@type':'Person', name:b.author||'Unknown' },
+    datePublished: b.year ? String(b.year) : undefined,
+    inLanguage:'en', isAccessibleForFree:true,
+    publisher: { '@type':'Organization', name:'Aimtor', url:ORIGIN } };
+  if(b.pages && b.pages!=='—') o.numberOfPages = b.pages;
+  if(b.cat) o.genre = b.catName || b.cat;
+  return o;
+}
+function itemList(items, name){
+  return { '@context':'https://schema.org', '@type':'ItemList', name:name,
+    numberOfItems: items.length,
+    itemListElement: items.slice(0,100).map((it,i)=>({ '@type':'ListItem', position:i+1, item:it })) };
+}
+
+/* ---------- crawlable A–Z index ---------- */
+function escH(s){ return String(s==null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fillIndex(ulId, rows, page, key, allLabel){
+  const ul = $id(ulId); if(!ul) return;
+  const links = rows.map(r=>`<li><a href="${escH(urlFor(page,key,r.id))}" class="hover:text-brand-600 underline-offset-2 hover:underline" title="${escH(r.title)}">${escH(r.title)}${r.sub2?` <span class="text-slate-400">— ${escH(r.sub2)}</span>`:''}</a></li>`);
+  ul.innerHTML = `<li><a href="${escH(urlFor(page))}" class="font-semibold hover:text-brand-600 underline-offset-2 hover:underline">${allLabel}</a></li>` + links.join('');
+}
+
+/* ---------- rebuild everything when Supabase data arrives ---------- */
+function rebuild(){
+  try{
+    const vs = V().filter(v=>v && v.title);
+    const ns = N().filter(n=>n && n.title && n.id!=null);
+    const bs = B().filter(b=>b && b.title && b.id!=null);
+    injectLd('ldVideos', itemList(vs.map(ldVideo),  'Aimtor Video Classes'));
+    injectLd('ldNotes',  itemList(ns.map(ldNote),   'Aimtor Study Notes'));
+    injectLd('ldBooks',  itemList(bs.map(ldBook),   'Aimtor Library Books'));
+    fillIndex('seoIndexClasses', vs.map(v=>({id:v.id,title:v.title,sub2:v.tutor})), 'class','v','All video classes');
+    fillIndex('seoIndexNotes',   ns.map(n=>({id:n.id,title:n.title,sub2:n.subject})), 'notes','n','All study notes');
+    fillIndex('seoIndexBooks',   bs.map(b=>({id:b.id,title:b.title,sub2:b.author})), 'library','b','All library books');
+  }catch(e){ console.warn('SEO rebuild failed', e); }
+  tryPendingDeep();
+}
+
+/* ---------- per-item SEO on open ---------- */
+function openItemSeo(kind, key, id, title, desc, ld, page, pageName){
+  itemOpen = {kind,key,id};
+  const u = urlFor(page, key, id);
+  setMeta(title, desc, u, kind==='video'?'video.other':'article');
+  injectLd('ldItem', { '@context':'https://schema.org', '@graph':[ ld, crumb(page, pageName, title, u) ] });
+  setAddress(page, key, id);
+}
+function closeItemSeo(){
+  if(!itemOpen) return;
+  itemOpen = null;
+  const el = $id('ldItem'); if(el) el.remove();
+  pageSeo(CUR());
+  setAddress(CUR());
+}
+
+/* ---------- wrap app functions ---------- */
+function wrapLater(){
+  if(window.playVideo && !window.playVideo.__seo){
+    const f = window.playVideo;
+    window.playVideo = function(id){
+      f(id);
+      const v = V().find(x=>String(x.id)===String(id));
+      if(v) openItemSeo('video','v',v.id,
+        v.title + ' — Free ' + (v.level||v.cat||'video') + ' class' + (v.tutor?' by '+v.tutor:'') + ' | Aimtor',
+        (v.desc || 'Watch this free video class on Aimtor.').slice(0,158),
+        ldVideo(v), 'class', 'Class');
+    };
+    window.playVideo.__seo = true;
+  }
+  if(window.openBook && !window.openBook.__seo){
+    const f = window.openBook;
+    window.openBook = function(id){
+      f(id);
+      const b = B().find(x=>String(x.id)===String(id));
+      if(b) openItemSeo('book','b',b.id,
+        b.title + (b.author?' by '+b.author:'') + ' — Read Free Online | Aimtor Library',
+        (b.desc || 'Read this book free in the Aimtor online library.').slice(0,158),
+        ldBook(b), 'library', 'Library');
+    };
+    window.openBook.__seo = true;
+  }
+  if(window.openPdfViewer && !window.openPdfViewer.__seo){
+    const f = window.openPdfViewer;
+    window.openPdfViewer = function(url, title, subtitle){
+      f(url, title, subtitle);
+      const n = N().find(x=>x.file_url && x.file_url===url && x.id!=null);
+      if(n) openItemSeo('note','n',n.id,
+        n.title + ' — Free ' + (n.subject||'study') + ' Notes PDF | Aimtor',
+        (n.blurb || 'Download these free study notes as PDF on Aimtor.').slice(0,158),
+        ldNote(n), 'notes', 'Notes');
+    };
+    window.openPdfViewer.__seo = true;
+  }
+  if(window.goPage && !window.goPage.__seo){
+    const f = window.goPage;
+    window.goPage = function(id){
+      f(id);
+      if(!itemOpen){ pageSeo(id); setAddress(id); }
+    };
+    window.goPage.__seo = true;
+  }
+}
+
+/* ---------- detect modal close → restore page SEO ---------- */
+function watchModal(id){
+  const el = $id(id); if(!el) return;
+  new MutationObserver(()=>{ if(el.classList.contains('hidden')) closeItemSeo(); })
+    .observe(el, {attributes:true, attributeFilter:['class']});
+}
+
+/* ---------- deep-link boot  (?p=page&v/n/b=id) ---------- */
+function tryPendingDeep(){
+  if(!pendingDeep) return;
+  const {key,id} = pendingDeep;
+  let ok = false;
+  if(key==='v'){ const v=V().find(x=>String(x.id)===String(id)); if(v){ ok=true; window.playVideo(v.id); } }
+  if(key==='b'){ const b=B().find(x=>String(x.id)===String(id)); if(b){ ok=true; window.openBook(b.id); } }
+  if(key==='n'){ const n=N().find(x=>String(x.id)===String(id) && x.file_url); if(n){ ok=true; window.openPdfViewer(n.file_url, n.title, 'Note preview'); } }
+  if(ok) pendingDeep = null;
+}
+function boot(){
+  wrapLater();
+  ['videoModal','bookModal','pdfViewer'].forEach(watchModal);
+  // rewrite base JSON-LD placeholder domain → real origin
+  const base = $id('ldBase');
+  if(base){ try{ base.textContent = base.textContent.split('https://aimtor.app/').join(ORIGIN); }catch(e){} }
+  const q = new URLSearchParams(location.search);
+  const p = q.get('p');
+  if(p && PAGE_SEO[p] && window.goPage) window.goPage(p);
+  else pageSeo(CUR());
+  const key = ['v','n','b'].find(k=>q.get(k)!=null);
+  if(key){ pendingDeep = { key, id:q.get(key) }; tryPendingDeep();
+    let tries=0; const iv=setInterval(()=>{ tryPendingDeep(); if(!pendingDeep||++tries>25) clearInterval(iv); },700); }
+  if(q.get('seo')==='sitemap') setTimeout(()=>API.downloadSitemap(), 4000);
+  rebuild();
+}
+
+/* ---------- sitemap.xml + robots.txt generators ---------- */
+function xmlEsc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function buildSitemap(){
+  const today = new Date().toISOString().slice(0,10);
+  const rows = [];
+  const add = (loc,lastmod,prio,freq)=>rows.push(
+    `  <url>\n    <loc>${xmlEsc(loc)}</loc>\n    <lastmod>${(lastmod||today).slice(0,10)}</lastmod>\n    <changefreq>${freq||'weekly'}</changefreq>\n    <priority>${prio}</priority>\n  </url>`);
+  add(ORIGIN, today, '1.0', 'daily');
+  ['class','notes','library','mypower','plans'].forEach(pg=>add(urlFor(pg), today, '0.9', 'daily'));
+  V().forEach(v=>{ if(v&&v.title&&v.id!=null) add(urlFor('class','v',v.id), v.created_at, '0.8'); });
+  N().forEach(n=>{ if(n&&n.title&&n.id!=null) add(urlFor('notes','n',n.id), n.created_at, '0.8'); });
+  B().forEach(b=>{ if(b&&b.title&&b.id!=null) add(urlFor('library','b',b.id), b.created_at, '0.8'); });
+  return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + rows.join('\n') + '\n</urlset>';
+}
+function download(name, text, mime){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type:mime||'text/plain'}));
+  a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+const API = {
+  contentUpdated(kind){ rebuild(); },
+  downloadSitemap(){ download('sitemap.xml', buildSitemap(), 'application/xml'); if(window.showAppToast) showAppToast('sitemap.xml downloaded — upload it beside index.html & submit in Google Search Console 🚀'); },
+  downloadRobots(){ download('robots.txt', 'User-agent: *\nAllow: /\n\nSitemap: ' + ORIGIN + 'sitemap.xml\n'); if(window.showAppToast) showAppToast('robots.txt downloaded — upload it beside index.html ✓'); },
+  rebuild, urlFor
+};
+window.AimtorSEO = API;
+
+if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', boot);
+else boot();
+console.info('%cAimtor SEO Engine active','color:#6d57f5;font-weight:bold',
+  '\n• Every class/note/book now has an indexable URL (?p=…&v/n/b=ID)'+
+  '\n• JSON-LD structured data auto-generated from Supabase'+
+  '\n• Run AimtorSEO.downloadSitemap() or open ?seo=sitemap to get sitemap.xml');
+})();
+</script>
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
+<script type="module" src="https://static.cloudflareinsights.com/beacon.min.js/v4513226cdae34746b4dedf0b4dfa099e1781791509496" integrity="sha512-ZE9pZaUXND66v380QUtch/5sE9tPFh2zg45pR2PB0CVkCtOREv2AJKkSidISWkysEuQ0EH8faUU5du78bx87UQ==" data-cf-beacon='{"version":"2024.11.0","token":"4edd5f8ec12a48cfa682ab8261b80a79"}' crossorigin="anonymous"></script>
 </body>
 </html>
